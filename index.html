@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de RCP</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#d32f2f">
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <h1>🫀 Guía de RCP</h1>
+            <p class="subtitle">Primeros auxilios en casa</p>
+        </div>
+
+        <!-- SELECTOR DE TIPO DE RCP -->
+        <div id="type-selector">
+            <p class="selector-label">Selecciona el tipo de RCP:</p>
+            <button class="type-btn" data-type="adulto">🧑 Adulto</button>
+            <button class="type-btn" data-type="niño">👦 Niño (1-8 años)</button>
+            <button class="type-btn" data-type="bebe">👶 Bebé (&lt; 1 año)</button>
+        </div>
+
+        <div id="step-container">
+            <div id="step-number"></div>
+            <p id="step-text">Elige un tipo de RCP y luego presiona "Iniciar guía".</p>
+        </div>
+
+        <div id="controls">
+            <button id="start-btn" class="btn primary" disabled>▶ Iniciar guía</button>
+            <button id="next-btn" class="btn primary" disabled>⏭ Siguiente paso</button>
+            <button id="voice-btn" class="btn secondary">🔇 Voz apagada</button>
+        </div>
+
+        <div id="metronome-box" style="display: none;">
+            <p>🔊 Ritmo de compresiones</p>
+            <button id="metro-start" class="btn metro-btn">▶ Iniciar metrónomo</button>
+            <button id="metro-stop" class="btn metro-btn" disabled>⏹ Parar</button>
+        </div>
+
+        <div id="emergency-box">
+            <a href="tel:911" class="btn emergency">📞 Llamar a emergencias</a>
+        </div>
+
+        <div class="disclaimer">
+            Esta guía es solo una ayuda. En una emergencia real, llama inmediatamente a los servicios de emergencia. No sustituye la formación profesional.
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
