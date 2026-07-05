@@ -1,7 +1,6 @@
 // ========================
 //  GUÍA DE RCP - ARGENTINA 2026
-//  Basada en la guía oficial resumida por el usuario
-//  Adulto: solo compresiones + DEA
+//  Adulto: compresiones prioritarias + ventilación condicionada + DEA
 //  Niño/Bebé: compresiones + ventilaciones opcionales
 // ========================
 
@@ -13,8 +12,9 @@ const stepsAdulto = [
   { title: "Paso 5: Profundidad y ritmo", text: "Comprimí el tórax entre 5 y 6 cm, a 100 a 120 por minuto.", metronome: true },
   { title: "Paso 6: Compresiones (30)", text: "Hacé 30 compresiones ininterrumpidas, liberando por completo el tórax entre una y otra.", metronome: true },
   { title: "Paso 7: Continuar ciclos", text: "Continuá ciclos de RCP hasta que llegue ayuda o la víctima recupere conciencia.", metronome: true },
-  { title: "Paso 8: Uso del DEA", text: "Si hay DEA, encendelo y seguí sus instrucciones.", metronome: false },
-  { title: "Paso 9: Posición de recuperación", text: "Si la persona recupera el pulso o la conciencia, colocala de costado en posición de recuperación.", metronome: false }
+  { title: "Paso 8: Ventilaciones", text: "Realizá 2 insuflaciones (sellando la nariz) solo si tenés entrenamiento y una máscara de protección. De lo contrario, no te detengas y continuá únicamente con las compresiones de pecho.", metronome: false },
+  { title: "Paso 9: Uso del DEA", text: "Si hay DEA, encendelo y seguí sus instrucciones.", metronome: false },
+  { title: "Paso 10: Posición de recuperación", text: "Si la persona recupera el pulso o la conciencia, colocala de costado en posición de recuperación.", metronome: false }
 ];
 
 const stepsNiño = [
