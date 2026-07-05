@@ -1,51 +1,52 @@
 // ========================
 //  GUÍA DE RCP - ARGENTINA 2026
-//  Fuente: Argentina.gob.ar (actualizado a agosto 2025)
-//  Secuencia 30:2 para Adulto, Niño y Bebé
+//  Basada en la guía oficial resumida por el usuario
+//  Adulto: solo compresiones + DEA
+//  Niño/Bebé: compresiones + ventilaciones opcionales
 // ========================
 
 const stepsAdulto = [
-  { title: "Paso 1: Seguridad", text: "Verificá que la escena sea segura para vos y la víctima (sin fuego, electricidad, gases).", metronome: false },
-  { title: "Paso 2: Consciencia", text: "Sacudí suavemente los hombros y preguntale en voz alta: ¿Estás bien?", metronome: false },
-  { title: "Paso 3: Llamar a emergencias", text: "Si no responde, llamá al 107 (SAME) o 911. Poné el altavoz y pedí un Desfibrilador Externo Automático (DEA).", metronome: false },
-  { title: "Paso 4: Vía aérea", text: "Abrí la vía aérea: incliná la cabeza hacia atrás y elevá el mentón.", metronome: false },
-  { title: "Paso 5: Verificar respiración", text: "Mirá, escuchá y sentí la respiración durante 10 segundos. Si no respira normalmente (jadeo/boqueo), iniciá RCP.", metronome: false },
-  { title: "Paso 6: Compresiones (30)", text: "Colocá el talón de una mano en el centro del esternón, la otra encima. Brazos rectos. Comprimí entre 5 y 6 cm.", metronome: true },
-  { title: "Paso 7: Ritmo", text: "Realizá 30 compresiones a un ritmo de 100-120 por minuto. Dejá que el pecho se expanda completamente.", metronome: true },
-  { title: "Paso 8: Ventilaciones (2)", text: "Si estás entrenado, realizá 2 insuflaciones boca a boca (sellá la nariz). Si no, continuá con solo compresiones.", metronome: false },
-  { title: "Paso 9: Continuar", text: "Alterná 30 compresiones y 2 ventilaciones. Si hay un DEA, encendelo, colocá los parches y seguí sus instrucciones. No pares hasta que llegue ayuda o la persona reaccione.", metronome: true },
-  { title: "Paso 10: Posición de seguridad", text: "Si la persona recupera la conciencia, colocala de costado (posición lateral de seguridad) y vigilá su respiración hasta que llegue la ayuda.", metronome: false }
+  { title: "Paso 1: Seguridad", text: "Verificá que la escena sea segura.", metronome: false },
+  { title: "Paso 2: Evaluación", text: "Evaluá respuesta hablándole y moviéndole suavemente los hombros.", metronome: false },
+  { title: "Paso 3: Llamar a emergencias", text: "Llamá al 107, 911 o al sistema local de emergencias.", metronome: false },
+  { title: "Paso 4: Posición de manos", text: "Colocá el talón de una mano en el centro inferior del esternón y la otra mano encima.", metronome: true },
+  { title: "Paso 5: Profundidad y ritmo", text: "Comprimí el tórax entre 5 y 6 cm, a 100 a 120 por minuto.", metronome: true },
+  { title: "Paso 6: Compresiones (30)", text: "Hacé 30 compresiones ininterrumpidas, liberando por completo el tórax entre una y otra.", metronome: true },
+  { title: "Paso 7: Continuar ciclos", text: "Continuá ciclos de RCP hasta que llegue ayuda o la víctima recupere conciencia.", metronome: true },
+  { title: "Paso 8: Uso del DEA", text: "Si hay DEA, encendelo y seguí sus instrucciones.", metronome: false },
+  { title: "Paso 9: Posición de recuperación", text: "Si la persona recupera el pulso o la conciencia, colocala de costado en posición de recuperación.", metronome: false }
 ];
 
 const stepsNiño = [
-  { title: "Paso 1: Seguridad", text: "Asegurate de que la zona sea segura.", metronome: false },
-  { title: "Paso 2: Consciencia", text: "Sacudí suavemente al niño y preguntale: ¿Estás bien?", metronome: false },
-  { title: "Paso 3: Primeros 2 min. de RCP", text: "Si estás solo, iniciá 2 minutos de RCP (30 compresiones + 2 ventilaciones) antes de llamar.", metronome: true },
-  { title: "Paso 4: Llamar a emergencias", text: "Después de los 2 minutos (o si hay otra persona), llamá al 107 o 911 y pedí un DEA.", metronome: false },
-  { title: "Paso 5: Vía aérea", text: "Incliná la cabeza hacia atrás suavemente y elevá el mentón.", metronome: false },
-  { title: "Paso 6: Verificar respiración", text: "Mirá, escuchá y sentí la respiración durante no más de 10 segundos.", metronome: false },
-  { title: "Paso 7: Compresiones (30)", text: "Usá una mano (niños pequeños) o dos manos (niños grandes) en el centro del pecho. Comprimí cerca de 5 cm.", metronome: true },
-  { title: "Paso 8: Ritmo", text: "Realizá 30 compresiones a 100-120 por minuto. Dejá que el pecho se expanda completamente.", metronome: true },
-  { title: "Paso 9: Ventilaciones (2)", text: "Dales 2 insuflaciones boca a boca (tapando la nariz) de 1 segundo cada una. Si no estás entrenado, continuá solo con compresiones.", metronome: false },
-  { title: "Paso 10: Continuar", text: "Alterná 30 compresiones y 2 ventilaciones. Si hay un DEA, usalo apenas llegue. No pares hasta que llegue ayuda o el niño reaccione.", metronome: true },
-  { title: "Paso 11: Posición de seguridad", text: "Si el niño recupera la conciencia, colocalo de costado en posición lateral de seguridad y vigilá su respiración.", metronome: false }
+  { title: "Paso 1: Seguridad", text: "Confirmá seguridad de la escena.", metronome: false },
+  { title: "Paso 2: Evaluación", text: "Revisá si responde y si respira normalmente.", metronome: false },
+  { title: "Paso 3: Llamar a emergencias", text: "Llamá a emergencias y pedí un DEA si está disponible.", metronome: false },
+  { title: "Paso 4: RCP inicial (si estás solo)", text: "Si estás solo, hacé 2 minutos de RCP antes de alejarte a llamar, según la guía oficial.", metronome: true },
+  { title: "Paso 5: Compresiones (30)", text: "Realizá 30 compresiones en el centro del pecho, a 100 a 120 por minuto.", metronome: true },
+  { title: "Paso 6: Profundidad", text: "La compresión debe hundir el tórax aproximadamente 5 cm.", metronome: true },
+  { title: "Paso 7: Ventilaciones (si sabés)", text: "Si sabés hacerlo, agregá 2 ventilaciones boca a boca después de las compresiones.", metronome: false },
+  { title: "Paso 8: Técnica de ventilación", text: "Para la ventilación, tapá ambas fosas nasales y soplá una bocanada breve de alrededor de 1 segundo.", metronome: false },
+  { title: "Paso 9: Manos según tamaño", text: "En niños pequeños se usa una mano; en niños más grandes o de complexión grande, dos manos.", metronome: false },
+  { title: "Paso 10: Continuar", text: "Repetí ciclos de 30 compresiones (y 2 ventilaciones si las estás haciendo) hasta que llegue ayuda.", metronome: true }
 ];
 
 const stepsBebe = [
-  { title: "Paso 1: Seguridad", text: "Asegurate de que la escena sea segura.", metronome: false },
-  { title: "Paso 2: Consciencia", text: "Sacudí suavemente o palmoteá la planta del pie. Observá si reacciona.", metronome: false },
-  { title: "Paso 3: Primeros 2 min. de RCP", text: "Si estás solo, iniciá 2 minutos de RCP (30 compresiones + 2 ventilaciones) antes de llamar.", metronome: true },
-  { title: "Paso 4: Llamar a emergencias", text: "Después de los 2 minutos (o si hay otra persona), llamá al 107 o 911 y pedí un DEA pediátrico si es posible.", metronome: false },
-  { title: "Paso 5: Vía aérea", text: "Colocá la cabeza en posición neutra (sin extender demasiado) y elevá el mentón con cuidado.", metronome: false },
-  { title: "Paso 6: Verificar respiración", text: "Mirá, escuchá y sentí la respiración durante 10 segundos.", metronome: false },
-  { title: "Paso 7: Compresiones (30)", text: "Usá dos dedos en el centro del esternón, justo debajo de la línea de los pezones. Comprimí hasta 4 cm.", metronome: true },
-  { title: "Paso 8: Ritmo", text: "Realizá 30 compresiones a 100-120 por minuto. Dejá que el pecho se expanda completamente.", metronome: true },
-  { title: "Paso 9: Ventilaciones (2)", text: "Cubrí boca y nariz del bebé con tu boca. Dales 2 insuflaciones suaves (solo un pequeño soplo de aire).", metronome: false },
-  { title: "Paso 10: Continuar", text: "Alterná 30 compresiones y 2 ventilaciones. Si hay un DEA, usalo apenas llegue. No pares hasta que llegue ayuda profesional.", metronome: true },
-  { title: "Paso 11: Posición de seguridad", text: "Si el bebé recupera la conciencia, colocalo de costado con cuidado, vigilando su respiración hasta que llegue la ayuda.", metronome: false }
+  { title: "Paso 1: Seguridad", text: "Verificá que el lugar sea seguro.", metronome: false },
+  { title: "Paso 2: Evaluación", text: "Evaluá si el bebé responde y si mueve o no el pecho al respirar.", metronome: false },
+  { title: "Paso 3: Llamar a emergencias", text: "Llamá a emergencias y pedí un DEA.", metronome: false },
+  { title: "Paso 4: RCP inicial (si estás solo)", text: "Si estás solo, la guía oficial indica hacer 2 minutos de RCP antes de ir a pedir ayuda.", metronome: true },
+  { title: "Paso 5: Posición", text: "Colocá al bebé boca arriba sobre superficie firme.", metronome: false },
+  { title: "Paso 6: Compresiones (30)", text: "Hacé 30 compresiones con dos dedos en el centro del esternón, entre los pezones.", metronome: true },
+  { title: "Paso 7: Profundidad y ritmo", text: "La profundidad aproximada es de 4 cm, con ritmo de 100 a 120 por minuto.", metronome: true },
+  { title: "Paso 8: Ventilaciones suaves", text: "Luego hacé 2 insuflaciones suaves, cubriendo boca y nariz del bebé con tu boca.", metronome: false },
+  { title: "Paso 9: Duración de la insuflación", text: "Cada insuflación debe durar alrededor de 1 segundo y solo lo suficiente para elevar el tórax.", metronome: false },
+  { title: "Paso 10: Continuar", text: "Repetí el ciclo hasta que llegue ayuda o el bebé se recupere.", metronome: true }
 ];
 
-// Estado
+// ========================
+//  LÓGICA DE LA APLICACIÓN
+// ========================
+
 let currentSteps = [];
 let currentStep = 0;
 let rcpType = null;
@@ -53,7 +54,6 @@ let voiceEnabled = false;
 let metronomeInterval = null;
 let audioCtx = null;
 
-// Elementos del DOM
 const typeButtons = document.querySelectorAll('.type-btn');
 const startBtn = document.getElementById('start-btn');
 const nextBtn = document.getElementById('next-btn');
@@ -64,7 +64,7 @@ const metroStart = document.getElementById('metro-start');
 const metroStop = document.getElementById('metro-stop');
 const metronomeBox = document.getElementById('metronome-box');
 
-// --- Voz ---
+// Voz
 function speak(text, title = '') {
   if (!voiceEnabled) return;
   window.speechSynthesis.cancel();
@@ -91,7 +91,7 @@ function toggleVoice() {
   }
 }
 
-// --- Metrónomo ---
+// Metrónomo
 function beep(duration = 80, frequency = 880) {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const oscillator = audioCtx.createOscillator();
@@ -108,7 +108,7 @@ function beep(duration = 80, frequency = 880) {
 function startMetronome() {
   if (metronomeInterval) return;
   beep(100, 880);
-  metronomeInterval = setInterval(() => beep(100, 880), 545); // ~110 BPM
+  metronomeInterval = setInterval(() => beep(100, 880), 545);
   metroStart.disabled = true;
   metroStop.disabled = false;
 }
@@ -122,7 +122,7 @@ function stopMetronome() {
   metroStop.disabled = true;
 }
 
-// --- Mostrar paso ---
+// Mostrar paso
 function showStep(index) {
   if (index < currentSteps.length) {
     const step = currentSteps[index];
@@ -145,16 +145,14 @@ function showStep(index) {
   }
 }
 
-// --- Selección de tipo ---
+// Selección de tipo
 typeButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     typeButtons.forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
     rcpType = btn.getAttribute('data-type');
-
     startBtn.disabled = false;
     stepText.textContent = `Modo ${rcpType === 'adulto' ? 'Adulto' : rcpType === 'niño' ? 'Niño (1-8 años)' : 'Bebé (< 1 año)'} seleccionado. Presiona "Iniciar guía".`;
-
     stopMetronome();
     currentStep = 0;
     nextBtn.disabled = true;
@@ -162,7 +160,7 @@ typeButtons.forEach(btn => {
   });
 });
 
-// --- Eventos ---
+// Eventos
 startBtn.addEventListener('click', () => {
   if (!rcpType) return;
   if (rcpType === 'adulto') currentSteps = stepsAdulto;
@@ -185,7 +183,7 @@ voiceBtn.addEventListener('click', toggleVoice);
 metroStart.addEventListener('click', startMetronome);
 metroStop.addEventListener('click', stopMetronome);
 
-// --- Service Worker ---
+// Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
