@@ -3,65 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>RCP – Panda Asistente</title>
+    <title>RCP para todos 🐣🐼🐶</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#e63946">
+    <meta name="theme-color" content="#ffaaa5">
 </head>
 <body>
     <div class="app-container">
-        <!-- Encabezado -->
-        <div class="header">
-            <h1>🫀 Guía de RCP</h1>
-            <p class="subtitle">Argentina 2026 · Asistente virtual</p>
+        <!-- Personaje y bocadillo -->
+        <div class="character-area">
+            <div id="character-avatar" class="character-avatar">🐼</div>
+            <div id="speech-bubble" class="speech-bubble">
+                <p id="bubble-text">¡Hola! Soy Pandi. Elegí abajo a quién vas a ayudar.</p>
+            </div>
         </div>
 
         <!-- Selector de tipo de RCP -->
         <div class="type-selector">
-            <button class="type-btn selected" data-type="adulto">🧑 Adulto</button>
-            <button class="type-btn" data-type="niño">👦 Niño</button>
-            <button class="type-btn" data-type="bebe">👶 Bebé</button>
-        </div>
-
-        <!-- Paso actual -->
-        <div id="step-container" class="step-card">
-            <p id="step-number" class="step-number"></p>
-            <p id="step-text" class="step-text">Elegí un tipo de RCP y presioná "Iniciar Guía".</p>
+            <button class="type-btn" data-type="adulto">🐶 Adulto</button>
+            <button class="type-btn selected" data-type="niño">🐼 Niño</button>
+            <button class="type-btn" data-type="bebe">🐣 Bebé</button>
         </div>
 
         <!-- Controles -->
         <div class="controls">
-            <button id="start-btn" class="btn btn-primary">▶ Iniciar Guía</button>
-            <button id="next-btn" class="btn btn-primary" disabled>⏭ Siguiente Paso</button>
-            <button id="voice-btn" class="btn btn-secondary">🔇 Voz apagada</button>
+            <button id="start-btn" class="btn btn-start">▶ Iniciar Guía</button>
+            <button id="next-btn" class="btn btn-next" disabled>⏭ Siguiente</button>
+            <button id="voice-btn" class="btn btn-voice">🔊 Voz: Activada</button>
         </div>
 
         <!-- Metrónomo -->
         <div id="metronome-box" class="metronome-box" style="display: none;">
-            <p style="font-weight: bold;">🔊 Ritmo 100-120 compresiones/min</p>
-            <div style="display: flex; gap: 8px; justify-content: center;">
-                <button id="metro-start" class="metro-btn">▶ Iniciar</button>
-                <button id="metro-stop" class="metro-btn" disabled>⏹ Parar</button>
-            </div>
+            <p>🥁 Ritmo de compresiones</p>
+            <button id="metro-start" class="metro-btn">▶ Iniciar</button>
+            <button id="metro-stop" class="metro-btn" disabled>⏹ Parar</button>
         </div>
 
-        <!-- Botón de emergencia -->
-        <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107 (Emergencias)</a>
+        <!-- Emergencia -->
+        <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
 
-        <!-- Aviso legal -->
         <p class="disclaimer">
-            Guía de auxilio. No reemplaza la formación profesional. Ante una emergencia real, llamá al 107 o 911.
+            Guía de auxilio. No reemplaza la formación profesional.
         </p>
-    </div>
-
-    <!-- 🐼 Bot de ayuda flotante (Panda) -->
-    <div id="panda-bot" class="panda-bot">
-        <button id="panda-toggle" class="panda-toggle" aria-label="Activar asistente Panda">
-            🐼
-        </button>
-        <div id="panda-bubble" class="panda-bubble">
-            <p id="panda-message">¡Hola! Soy Panda, estoy aquí para ayudarte con esta guía.</p>
-        </div>
     </div>
 
     <script src="app.js"></script>
