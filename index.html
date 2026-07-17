@@ -11,13 +11,22 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Área del avatar animado -->
         <div class="avatar-area">
             <div id="avatar-container" class="avatar-container">
                 <div id="avatar-head" class="avatar-head">
                     <div class="avatar-eyes">
-                        <div class="avatar-eye left"><div class="pupil"></div></div>
-                        <div class="avatar-eye right"><div class="pupil"></div></div>
+                        <div class="avatar-eye left">
+                            <div class="eyelid"></div>
+                            <div class="pupil"></div>
+                        </div>
+                        <div class="avatar-eye right">
+                            <div class="eyelid"></div>
+                            <div class="pupil"></div>
+                        </div>
+                    </div>
+                    <div id="avatar-eyebrows" class="avatar-eyebrows">
+                        <div class="eyebrow left"></div>
+                        <div class="eyebrow right"></div>
                     </div>
                     <div id="avatar-mouth" class="avatar-mouth"></div>
                     <div class="avatar-blush left"></div>
@@ -31,36 +40,36 @@
             </div>
         </div>
 
-        <!-- Selector de tipo de RCP -->
         <div class="type-selector">
-            <button class="type-btn" data-type="adulto">
-                <img src="adulto.png" alt="Adulto" class="type-img"><span>Adulto</span>
+            <button class="type-btn" data-type="adulto" data-gender="masculino">
+                <span class="type-emoji">👨‍⚕️</span> Adulto
             </button>
-            <button class="type-btn selected" data-type="niño">
-                <img src="niño.png" alt="Niño" class="type-img"><span>Niño</span>
+            <button class="type-btn selected" data-type="niño" data-gender="masculino">
+                <span class="type-emoji">🧒</span> Niño
             </button>
-            <button class="type-btn" data-type="bebe">
-                <img src="bebe.png" alt="Bebé" class="type-img"><span>Bebé</span>
+            <button class="type-btn" data-type="bebe" data-gender="femenino">
+                <span class="type-emoji">👶</span> Bebé
             </button>
         </div>
 
-        <!-- Controles -->
+        <div class="gender-selector">
+            <button class="gender-btn active" data-gender="masculino">♂️</button>
+            <button class="gender-btn" data-gender="femenino">♀️</button>
+        </div>
+
         <div class="controls">
             <button id="start-btn" class="btn btn-start">▶ Iniciar Guía</button>
             <button id="next-btn" class="btn btn-next" disabled>⏭ Siguiente</button>
             <button id="voice-btn" class="btn btn-voice">🔊 Voz: Activada</button>
         </div>
 
-        <!-- Metrónomo -->
         <div id="metronome-box" class="metronome-box" style="display: none;">
             <p>🎵 Ritmo 100‑120/min</p>
             <button id="metro-start" class="metro-btn">▶ Iniciar</button>
             <button id="metro-stop" class="metro-btn" disabled>⏹ Parar</button>
         </div>
 
-        <!-- Emergencia -->
         <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
-
         <p class="disclaimer">Asistente virtual · No sustituye formación profesional</p>
     </div>
 
