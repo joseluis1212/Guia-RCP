@@ -6,7 +6,10 @@ const urlsToCache = [
   '/app.js',
   '/manifest.json',
   '/icon-192.png',
-  '/icon-512.png'
+  '/icon-512.png',
+  '/adulto.png',   // ← Avatar adulto
+  '/niño.png',     // ← Avatar niño
+  '/bebe.png'      // ← Avatar bebé
 ];
 
 self.addEventListener('install', event => {
