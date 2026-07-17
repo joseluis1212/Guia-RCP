@@ -1,25 +1,8 @@
 // ========================
-//  GUÍA DE RCP INTERACTIVA
-//  Con Personajes y Voces
+//  GUÍA DE RCP - ASISTENTE PANDA
 // ========================
 
-// --- Configuración de Personajes ---
-const characters = {
-    doctor: {
-        emoji: '🩺',
-        className: 'doctor',
-        greeting: '¡Hola! Soy el Dr. López. Selecciona el tipo de RCP para empezar.',
-        voiceParams: { pitch: 0.8, rate: 0.9 } // Voz grave, profesional
-    },
-    panda: {
-        emoji: '🐼',
-        className: 'panda',
-        greeting: '¡Hola! Soy Panda RCP. ¡Vamos a aprender a salvar vidas jugando!',
-        voiceParams: { pitch: 1.6, rate: 1.0 } // Voz aguda, amigable
-    }
-};
-
-// --- Pasos de RCP (Igual que antes, sin cambios) ---
+// Pasos de RCP (adulto, niño, bebé) – igual que antes
 const stepsAdulto = [
   { title: "Paso 1: Seguridad", text: "Verificá que la escena sea segura.", metronome: false },
   { title: "Paso 2: Evaluación", text: "Evaluá respuesta hablándole y moviéndole suavemente los hombros.", metronome: false },
@@ -59,216 +42,206 @@ const stepsBebe = [
   { title: "Paso 10: Continuar", text: "Repetí el ciclo hasta que llegue ayuda o el bebé se recupere.", metronome: true }
 ];
 
-// --- Estado de la App ---
+// Estado
 let currentSteps = [];
 let currentStep = 0;
-let rcpType = 'adulto'; // Por defecto
-let currentCharacter = 'doctor'; // Por defecto
+let rcpType = 'adulto';
 let voiceEnabled = false;
 let metronomeInterval = null;
 let audioCtx = null;
 
-// --- Elementos del DOM ---
-const avatarEl = document.getElementById('avatar');
-const stepTextEl = document.getElementById('step-text');
+// Elementos DOM
+const stepNum = document.getElementById('step-number');
+const stepText = document.getElementById('step-text');
 const startBtn = document.getElementById('start-btn');
 const nextBtn = document.getElementById('next-btn');
 const voiceBtn = document.getElementById('voice-btn');
 const metroStart = document.getElementById('metro-start');
 const metroStop = document.getElementById('metro-stop');
 const metronomeBox = document.getElementById('metronome-box');
-const charButtons = document.querySelectorAll('.char-btn');
 const typeButtons = document.querySelectorAll('.type-btn');
 
-// ========================
-//  1. LÓGICA DE PERSONAJES
-// ========================
-function setCharacter(charKey) {
-    currentCharacter = charKey;
-    const char = characters[charKey];
-    
-    // Actualizar botones de selección
-    charButtons.forEach(btn => btn.classList.remove('selected'));
-    document.querySelector(`.char-btn[data-char="${charKey}"]`).classList.add('selected');
-    
-    // Actualizar avatar visual
-    avatarEl.textContent = char.emoji;
-    avatarEl.className = `avatar ${char.className}`;
-    
-    // Mostrar saludo del personaje
-    if (currentStep === 0 || !currentSteps.length) {
-        stepTextEl.textContent = char.greeting;
-        if (voiceEnabled) speak(char.greeting);
-    }
-}
+// Elementos del Panda
+const pandaToggle = document.getElementById('panda-toggle');
+const pandaBubble = document.getElementById('panda-bubble');
+const pandaMessage = document.getElementById('panda-message');
 
 // ========================
-//  2. LÓGICA DE VOZ (TTS)
+//  FUNCIONES PANDA
+// ========================
+function mostrarMensajePanda(texto, duracion = 4000) {
+    pandaMessage.textContent = texto;
+    pandaBubble.classList.add('visible');
+    // Ocultar después de un tiempo
+    clearTimeout(window.pandaTimeout);
+    window.pandaTimeout = setTimeout(() => {
+        pandaBubble.classList.remove('visible');
+    }, duracion);
+}
+
+function hablarPanda(texto) {
+    if (!voiceEnabled) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.pitch = 1.6;   // Voz aguda de Panda
+    utterance.rate = 0.95;
+    utterance.lang = 'es-AR';
+    // Intentar voz en español
+    const voices = window.speechSynthesis.getVoices();
+    const pref = voices.find(v => v.lang.includes('es-AR')) ||
+                 voices.find(v => v.lang.includes('es-ES')) ||
+                 voices.find(v => v.lang.includes('es-MX'));
+    if (pref) utterance.voice = pref;
+    window.speechSynthesis.speak(utterance);
+}
+
+// Al hacer clic en el botón flotante, saluda y activa/desactiva voz
+pandaToggle.addEventListener('click', () => {
+    mostrarMensajePanda('🐼 ¡Hola! Soy Panda, estoy aquí para ayudarte con esta guía.');
+    hablarPanda('¡Hola! Soy Panda, estoy aquí para ayudarte con esta guía.');
+    // Si la voz está apagada, la activa automáticamente
+    if (!voiceEnabled) {
+        voiceEnabled = true;
+        voiceBtn.textContent = '🔊 Voz activada';
+        voiceBtn.classList.remove('btn-secondary');
+        voiceBtn.classList.add('btn-primary');
+    }
+});
+
+// Mostrar saludo inicial después de cargar la página
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        mostrarMensajePanda('🐼 ¡Hola! Soy Panda, estoy aquí para ayudarte con esta guía.', 6000);
+    }, 800);
+});
+
+// ========================
+//  FUNCIONES DE VOZ (usa la de Panda)
 // ========================
 function speak(text) {
-    if (!voiceEnabled) return;
-    
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const charParams = characters[currentCharacter].voiceParams;
-    
-    utterance.pitch = charParams.pitch;
-    utterance.rate = charParams.rate;
-    utterance.lang = 'es-AR'; // Priorizar español argentino
-    
-    // Intentar elegir una voz nativa de buena calidad
-    const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find(voice => voice.lang.includes('es-AR')) ||
-                           voices.find(voice => voice.lang.includes('es-ES')) ||
-                           voices.find(voice => voice.lang.includes('es-MX'));
-    if (preferredVoice) utterance.voice = preferredVoice;
-    
-    window.speechSynthesis.speak(utterance);
+    // Redirige a la voz de Panda
+    hablarPanda(text);
 }
 
 function toggleVoice() {
     voiceEnabled = !voiceEnabled;
-    voiceBtn.textContent = voiceEnabled ? '🔊 Voz: Activada' : '🔇 Voz: Apagada';
-    
     if (voiceEnabled) {
+        voiceBtn.textContent = '🔊 Voz activada';
+        voiceBtn.classList.remove('btn-secondary');
+        voiceBtn.classList.add('btn-primary');
         const step = currentSteps[currentStep];
         if (step) speak(step.text);
-        else speak(characters[currentCharacter].greeting);
+        else mostrarMensajePanda('Voz activada. Panda te guiará.');
     } else {
+        voiceBtn.textContent = '🔇 Voz apagada';
+        voiceBtn.classList.remove('btn-primary');
+        voiceBtn.classList.add('btn-secondary');
         window.speechSynthesis.cancel();
     }
 }
 
-// Cargar las voces al inicio (importante para móviles)
-window.speechSynthesis.onvoiceschanged = () => {
-    // Se ejecuta cuando las voces están disponibles
-    console.log('Voces cargadas');
-};
-
 // ========================
-//  3. METRÓNOMO
+//  METRÓNOMO
 // ========================
 function beep(duration = 80, frequency = 880) {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const oscillator = audioCtx.createOscillator();
-  const gainNode = audioCtx.createGain();
-  oscillator.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-  oscillator.frequency.value = frequency;
-  oscillator.type = 'square';
-  gainNode.gain.value = 0.4;
-  oscillator.start();
-  oscillator.stop(audioCtx.currentTime + duration / 1000);
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    oscillator.frequency.value = frequency;
+    oscillator.type = 'square';
+    gainNode.gain.value = 0.4;
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + duration / 1000);
 }
 
 function startMetronome() {
-  if (metronomeInterval) return;
-  beep(100, 880);
-  metronomeInterval = setInterval(() => beep(100, 880), 545);
-  metroStart.disabled = true;
-  metroStop.disabled = false;
+    if (metronomeInterval) return;
+    beep(100, 880);
+    metronomeInterval = setInterval(() => beep(100, 880), 545);
+    metroStart.disabled = true;
+    metroStop.disabled = false;
 }
 
 function stopMetronome() {
-  if (metronomeInterval) {
-    clearInterval(metronomeInterval);
-    metronomeInterval = null;
-  }
-  metroStart.disabled = false;
-  metroStop.disabled = true;
+    if (metronomeInterval) {
+        clearInterval(metronomeInterval);
+        metronomeInterval = null;
+    }
+    metroStart.disabled = false;
+    metroStop.disabled = true;
 }
 
 // ========================
-//  4. NAVEGACIÓN DE PASOS
+//  NAVEGACIÓN DE PASOS
 // ========================
 function showStep(index) {
-  if (index < currentSteps.length) {
-    const step = currentSteps[index];
-    stepTextEl.textContent = step.text;
-    speak(step.text);
+    if (index < currentSteps.length) {
+        const step = currentSteps[index];
+        stepNum.textContent = step.title;
+        stepText.textContent = step.text;
+        speak(step.text);
+        mostrarMensajePanda('🐼 ' + step.text, 5000);
 
-    // Control del metrónomo
-    if (step.metronome) {
-      metronomeBox.style.display = 'block';
+        if (step.metronome) {
+            metronomeBox.style.display = 'block';
+        } else {
+            metronomeBox.style.display = 'none';
+            stopMetronome();
+        }
+
+        nextBtn.textContent = (index === currentSteps.length - 1) ? '🔄 Repetir Guía' : '⏭ Siguiente Paso';
+        nextBtn.disabled = false;
     } else {
-      metronomeBox.style.display = 'none';
-      stopMetronome();
+        currentStep = 0;
+        showStep(0);
     }
-
-    nextBtn.textContent = (index === currentSteps.length - 1) ? '🔄 Repetir Guía' : '⏭ Siguiente Paso';
-    nextBtn.disabled = false;
-  } else {
-    currentStep = 0;
-    showStep(0);
-  }
 }
 
 // ========================
-//  5. EVENTOS Y CONTROL
+//  EVENTOS
 // ========================
-
-// Selección de Personaje
-charButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        setCharacter(btn.getAttribute('data-char'));
-    });
-});
-
-// Selección de Tipo de RCP
 typeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         typeButtons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         rcpType = btn.getAttribute('data-type');
-        
-        // Feedback visual y de voz
-        const typeNames = { adulto: 'Adulto', niño: 'Niño', bebe: 'Bebé' };
-        stepTextEl.textContent = `Modo ${typeNames[rcpType]} seleccionado. Presiona "Iniciar Guía".`;
+        const names = { adulto: 'Adulto', niño: 'Niño', bebe: 'Bebé' };
+        stepText.textContent = `Modo ${names[rcpType]} seleccionado. Presioná "Iniciar Guía".`;
         startBtn.disabled = false;
-        
-        if (voiceEnabled) speak(`Modo ${typeNames[rcpType]} seleccionado`);
-        stopMetronome();
         nextBtn.disabled = true;
+        stopMetronome();
         metronomeBox.style.display = 'none';
     });
 });
 
-// Iniciar Guía
 startBtn.addEventListener('click', () => {
-  if (rcpType === 'adulto') currentSteps = stepsAdulto;
-  else if (rcpType === 'niño') currentSteps = stepsNiño;
-  else if (rcpType === 'bebe') currentSteps = stepsBebe;
+    if (rcpType === 'adulto') currentSteps = stepsAdulto;
+    else if (rcpType === 'niño') currentSteps = stepsNiño;
+    else if (rcpType === 'bebe') currentSteps = stepsBebe;
 
-  currentStep = 0;
-  showStep(currentStep);
-  startBtn.disabled = true;
-  nextBtn.disabled = false;
+    currentStep = 0;
+    showStep(currentStep);
+    startBtn.disabled = true;
+    nextBtn.disabled = false;
 });
 
-// Siguiente Paso
 nextBtn.addEventListener('click', () => {
-  currentStep++;
-  if (currentStep >= currentSteps.length) currentStep = 0;
-  showStep(currentStep);
+    currentStep++;
+    if (currentStep >= currentSteps.length) currentStep = 0;
+    showStep(currentStep);
 });
 
-// Eventos de Voz y Metrónomo
 voiceBtn.addEventListener('click', toggleVoice);
 metroStart.addEventListener('click', startMetronome);
 metroStop.addEventListener('click', stopMetronome);
 
-// --- Inicialización ---
-// Iniciamos con el Doctor seleccionado y Adulto por defecto
-setCharacter('doctor');
-document.querySelector('.type-btn[data-type="adulto"]').classList.add('selected');
-rcpType = 'adulto';
-startBtn.disabled = false;
-
-// Service Worker (Offline)
+// Service Worker
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(reg => console.log('SW registrado'))
-      .catch(err => console.error('Error SW', err));
-  });
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('SW registrado'))
+            .catch(err => console.error('Error SW', err));
+    });
 }
