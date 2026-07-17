@@ -45,19 +45,15 @@ body {
 }
 
 .character-avatar {
-    font-size: 80px;
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff3e0;
+    overflow: hidden;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     animation: bounce 2s infinite;
     cursor: pointer;
-    user-select: none;
     transition: transform 0.2s;
+    background: #fff3e0; /* color de respaldo si no hay imagen */
 }
 
 .character-avatar:active {
