@@ -30,13 +30,14 @@ body {
 
 /* AVATAR */
 .avatar-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
-.avatar-container { width: 130px; height: 130px; position: relative; animation: breatheAndFloat 5s ease-in-out infinite; cursor: pointer; }
-
+.avatar-container { 
+    width: 130px; height: 130px; position: relative; 
+    animation: breatheAndFloat 5s ease-in-out infinite; cursor: pointer; 
+}
 @keyframes breatheAndFloat {
     0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-6px) scale(1.03); }
 }
-
 .avatar-head {
     width: 100%; height: 100%; border-radius: 50%;
     background: #fce0c6; position: relative;
@@ -50,7 +51,7 @@ body {
 .pupil { width: 9px; height: 11px; background: white; border-radius: 50%; position: absolute; top: 5px; left: 7px; transition: transform 0.15s ease; }
 .eyelid {
     position: absolute; top: 0; left: 0; width: 100%; height: 50%;
-    background: #fce0c6; /* se sincroniza con color de piel vía JS */
+    background: #fce0c6; /* se actualiza con JS */
     animation: blink 4s infinite; z-index: 2;
 }
 @keyframes blink {
@@ -64,9 +65,14 @@ body {
 
 /* Boca */
 .avatar-mouth { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); width: 20px; height: 9px; background: #c26b6b; border-radius: 0 0 12px 12px; transition: all 0.2s; }
-.avatar-mouth.speaking { width: 24px; height: 5px; border-radius: 10px; background: #a04a4a; }
-.avatar-mouth.worried { width: 16px; height: 10px; border-radius: 0; background: transparent; border-bottom: 3px solid #a04a4a; }
+.avatar-mouth.speaking { width: 24px; height: 5px; border-radius: 10px; background: #a04a4a; animation: talk 0.3s infinite; }
+.avatar-mouth.worried { width: 16px; height: 10px; background: transparent; border-bottom: 3px solid #a04a4a; border-radius: 0; }
 .avatar-mouth.relieved { width: 22px; height: 10px; border-radius: 0 0 15px 15px; background: #e08a8a; }
+
+@keyframes talk {
+    0%, 100% { height: 8px; border-radius: 0 0 10px 10px; }
+    50% { height: 4px; border-radius: 10px; }
+}
 
 /* Mejillas */
 .avatar-blush { width: 18px; height: 12px; background: rgba(255, 140, 140, 0.4); border-radius: 50%; position: absolute; top: 62px; }
@@ -74,6 +80,29 @@ body {
 
 /* Accesorio */
 .avatar-accessory { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 32px; transition: all 0.3s; }
+
+/* Mano que señala */
+.avatar-hand {
+    position: absolute; top: 50%; left: 50%;
+    font-size: 32px;
+    transform: translate(-50%, -50%) rotate(0deg);
+    opacity: 0; transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+}
+.avatar-hand.pointing {
+    opacity: 1;
+    transform: translate(70px, -30px) rotate(-20deg);
+}
+
+/* Rebote al ritmo del metrónomo */
+@keyframes compressBounce {
+    0% { transform: translateY(0) scaleY(1); }
+    50% { transform: translateY(6px) scaleY(0.92); }
+    100% { transform: translateY(0) scaleY(1); }
+}
+.avatar-container.compress {
+    animation: compressBounce 0.545s infinite; /* 110 BPM */
+}
 
 /* Globo */
 .speech-bubble { background: var(--bubble-bg); border-radius: 20px 20px 20px 6px; padding: 14px 18px; margin-top: 12px; max-width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); animation: pop 0.4s ease; }
@@ -86,7 +115,7 @@ body {
 .type-btn.selected, .gender-btn.active { background: rgba(168, 218, 220, 0.2); border-color: var(--celeste); color: white; box-shadow: 0 0 14px rgba(168,218,220,0.3); }
 .type-emoji { font-size: 1.3rem; }
 
-/* Botones de acción */
+/* Botones */
 .btn { width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
 .btn-start { background: var(--verde); color: #111; box-shadow: 0 6px 16px rgba(6,214,160,0.3); }
@@ -97,3 +126,8 @@ body {
 .metronome-box { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 14px; margin: 12px 0; color: #ccc; border: 1px dashed #ffb347; }
 .metro-btn { background: #ffb347; color: #111; border: none; border-radius: 20px; padding: 12px 16px; font-weight: bold; cursor: pointer; margin: 4px; }
 .disclaimer { font-size: 0.7rem; color: #666; margin-top: 14px; }
+
+/* Ocultar/mostrar botones */
+#start-btn.guide-active { display: none; }
+#next-btn { display: none; }
+#next-btn.visible { display: flex; }
