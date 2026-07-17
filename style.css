@@ -40,7 +40,7 @@ body {
     border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* ── AVATAR ANIMADO ── */
+/* ── AVATAR ── */
 .avatar-area {
     display: flex;
     flex-direction: column;
@@ -52,29 +52,216 @@ body {
     width: 130px;
     height: 130px;
     position: relative;
-    animation: float 3s ease-in-out infinite, breathe 4s ease-in-out infinite;
+    animation: breatheAndFloat 5s ease-in-out infinite;
     cursor: pointer;
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-}
-
-@keyframes breathe {
-    0%, 100% { transform: scale(1) translateY(0); }
-    50% { transform: scale(1.03) translateY(-3px); }
+@keyframes breatheAndFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-6px) scale(1.03); }
 }
 
 .avatar-head {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: #fce0c6; /* se cambia con JS */
+    background: #fce0c6;
     position: relative;
     box-shadow: 0 0 25px rgba(255, 180, 160, 0.5), 0 8px 18px rgba(0,0,0,0.4);
     transition: background 0.3s;
 }
 
-/* Ojos, boca, accesorio... (igual que en la versión anterior) */
-/* ... (mantengo las mismas reglas de la última versión con avatar CSS) ... */
+/* Ojos */
+.avatar-eyes {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 24px;
+}
+
+.avatar-eye {
+    width: 22px;
+    height: 26px;
+    background: #4a2c2c;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    animation: blink 4s infinite;
+}
+
+@keyframes blink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+.pupil {
+    width: 8px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    transition: transform 0.1s ease;
+}
+
+/* Boca */
+.avatar-mouth {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 8px;
+    background: #c26b6b;
+    border-radius: 0 0 10px 10px;
+    transition: all 0.2s ease;
+}
+
+.avatar-mouth.speaking {
+    width: 22px;
+    height: 4px;
+    border-radius: 10px;
+    background: #a04a4a;
+}
+
+/* Mejillas */
+.avatar-blush {
+    width: 16px;
+    height: 10px;
+    background: rgba(255, 140, 140, 0.5);
+    border-radius: 50%;
+    position: absolute;
+    top: 60px;
+}
+.avatar-blush.left { left: 18px; }
+.avatar-blush.right { right: 18px; }
+
+/* Accesorio */
+.avatar-accessory {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 32px;
+}
+
+/* Globo */
+.speech-bubble {
+    background: var(--bubble-bg);
+    border-radius: 20px 20px 20px 6px;
+    padding: 14px 18px;
+    margin-top: 12px;
+    max-width: 90%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#bubble-text {
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Selector de tipo */
+.type-selector {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 16px 0;
+}
+
+.type-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    color: #ccc;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(5px);
+}
+
+.type-btn.selected {
+    background: rgba(168, 218, 220, 0.2);
+    border-color: var(--celeste);
+    color: white;
+    box-shadow: 0 0 14px rgba(168,218,220,0.3);
+}
+
+.type-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* Botones */
+.btn {
+    width: 100%;
+    padding: 16px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+    transform: none;
+}
+
+.btn-start { background: var(--verde); color: #111; box-shadow: 0 6px 16px rgba(6,214,160,0.3); }
+.btn-next { background: var(--amarillo); color: #222; box-shadow: 0 6px 16px rgba(255,209,102,0.3); }
+.btn-voice { background: rgba(255,255,255,0.08); color: #eee; border: 1px solid rgba(255,255,255,0.2); }
+.btn-emergency { background: var(--rojo); color: white; animation: pulse 2s infinite; text-decoration: none; }
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,107,107,0.5); }
+    70% { box-shadow: 0 0 0 18px rgba(255,107,107,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,107,107,0); }
+}
+
+.metronome-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    padding: 14px;
+    margin: 12px 0;
+    color: #ccc;
+    border: 1px dashed #ffb347;
+}
+
+.metro-btn {
+    background: #ffb347;
+    color: #111;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 4px;
+}
+
+.disclaimer { font-size: 0.7rem; color: #666; margin-top: 14px; }
