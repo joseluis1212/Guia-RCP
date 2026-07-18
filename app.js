@@ -1,5 +1,5 @@
 // ========================
-//  RCP COMPANIONS ✨ v6.0 (Médico Chibi Asistente)
+//  GUARDIANES DE LA VIDA
 // ========================
 
 const stepsAdulto = [
@@ -41,26 +41,26 @@ const stepsBebe = [
   { title: "Paso 10: Continuar", text: "Repetí el ciclo hasta que llegue ayuda o el bebé se recupere.", metronome: true }
 ];
 
-const characters = {
-    adulto: {
-        masculino: { name:'Dr. RCP', greeting:'Soy el Dr. RCP. Sé que es difícil. Respirá hondo. Estoy aquí para ayudarte.', pitch:0.9, rate:0.9 },
-        femenino: { name:'Dra. RCP', greeting:'Soy la Dra. RCP. Entiendo la situación. Vamos a superarlo juntas.', pitch:1.1, rate:0.9 }
-    },
-    niño: {
-        masculino: { name:'Pandi', greeting:'¡Hola! Soy Pandi. Estás en una emergencia, pero yo te guío paso a paso.', pitch:1.6, rate:1.0 },
-        femenino: { name:'Mika', greeting:'¡Hola! Soy Mika. No tengas miedo, juntas ayudaremos a este niño.', pitch:1.8, rate:1.0 }
-    },
-    bebe: {
-        masculino: { name:'Pío', greeting:'Pío pío... Sé que es difícil. Vamos a cuidar al bebé juntitos.', pitch:2.0, rate:0.85 },
-        femenino: { name:'Lila', greeting:'Hola... Soy Lila. Respiramos juntas. Cuidemos a este bebé con amor.', pitch:2.2, rate:0.85 }
-    }
+// Voces de los guardianes
+const guardianVoices = {
+    bunny: { pitch: 1.2, rate: 0.9 },
+    hoodie: { pitch: 1.5, rate: 1.1 },
+    astro: { pitch: 0.9, rate: 0.85 },
+    pulse: { pitch: 1.0, rate: 0.95 }
+};
+
+// Frases de aliento aleatorias
+const guardianPhrases = {
+    bunny: ["Estoy con vos.", "Hagámoslo paso a paso.", "Lo estás haciendo muy bien.", "Respirá hondo."],
+    hoodie: ["¡Excelente!", "No te detengas.", "Mantené el ritmo.", "Cinco centímetros de profundidad."],
+    astro: ["Colocá los parches del DEA.", "Nadie debe tocar a la víctima.", "Seguí las instrucciones del equipo.", "Posición lateral de seguridad."],
+    pulse: ["Pedí ayuda a otra persona.", "Busquemos un desfibrilador.", "La ambulancia está en camino.", "Controlá el tiempo."]
 };
 
 let currentSteps = [], currentStep = 0, rcpType = 'adulto', rcpGender = 'masculino';
 let voiceEnabled = true, metronomeInterval = null, audioCtx = null, guideStarted = false;
 
 const avatarContainer = document.getElementById('avatar-container');
-const chibiMouth = document.querySelector('.chibi-mouth');
 const bubbleText = document.getElementById('bubble-text');
 const startBtn = document.getElementById('start-btn');
 const nextBtn = document.getElementById('next-btn');
@@ -72,9 +72,28 @@ const typeBtns = document.querySelectorAll('.type-btn');
 const genderBtns = document.querySelectorAll('.gender-btn');
 const pupils = document.querySelectorAll('.pupil');
 
+function getGuardianForStep(stepIndex) {
+    if (stepIndex <= 1 || stepIndex === 9) return 'bunny';
+    if (stepIndex >= 3 && stepIndex <= 6) return 'hoodie';
+    if (stepIndex === 2) return 'pulse';
+    return 'astro';
+}
+
+function switchGuardian(guardian) {
+    document.querySelectorAll('.guardian').forEach(g => g.style.display = 'none');
+    document.getElementById(guardian).style.display = 'block';
+    // Frase de aliento
+    const phrases = guardianPhrases[guardian];
+    const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+    bubbleText.textContent = randomPhrase;
+}
+
 function updateAvatarState(state) {
-    chibiMouth.classList.remove('speaking');
-    if (state === 'speaking') chibiMouth.classList.add('speaking');
+    const mouth = document.querySelector(`#${getGuardianForStep(currentStep)} .guardian-mouth`);
+    if (mouth) {
+        mouth.classList.remove('speaking');
+        if (state === 'speaking') mouth.classList.add('speaking');
+    }
     if (state === 'compressing') {
         avatarContainer.classList.add('compress');
     } else {
@@ -130,9 +149,11 @@ function stopMetronome() {
 function showStep(index) {
     if (index < currentSteps.length) {
         const step = currentSteps[index];
+        const guardian = getGuardianForStep(index);
+        switchGuardian(guardian);
         bubbleText.textContent = step.text;
-        const char = characters[rcpType][rcpGender];
-        speak(step.text, char.pitch, char.rate);
+        const voice = guardianVoices[guardian];
+        speak(step.text, voice.pitch, voice.rate);
         if (step.metronome) { startMetronome(); updateAvatarState('compressing'); }
         else { stopMetronome(); updateAvatarState('idle'); }
         metronomeBox.style.display = step.metronome ? 'block' : 'none';
@@ -150,9 +171,10 @@ typeBtns.forEach(btn => {
         btn.classList.add('selected');
         rcpType = btn.dataset.type;
         if (!guideStarted) {
-            const char = characters[rcpType][rcpGender];
-            bubbleText.textContent = char.greeting;
-            if (voiceEnabled) speak(char.greeting, char.pitch, char.rate);
+            const voice = guardianVoices.bunny;
+            const msg = 'Soy Bunny, tu instructora. Seleccioná el tipo de RCP y presioná Iniciar Guía.';
+            bubbleText.textContent = msg;
+            if (voiceEnabled) speak(msg, voice.pitch, voice.rate);
         }
     });
 });
@@ -162,11 +184,6 @@ genderBtns.forEach(btn => {
         genderBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         rcpGender = btn.dataset.gender;
-        if (!guideStarted) {
-            const char = characters[rcpType][rcpGender];
-            bubbleText.textContent = char.greeting;
-            if (voiceEnabled) speak(char.greeting, char.pitch, char.rate);
-        }
     });
 });
 
@@ -207,13 +224,13 @@ document.addEventListener('touchmove', e => {
 });
 
 window.addEventListener('load', () => {
-    const char = characters[rcpType][rcpGender];
-    bubbleText.textContent = char.greeting;
-    setTimeout(() => { if (voiceEnabled) speak(char.greeting, char.pitch, char.rate); }, 600);
+    switchGuardian('bunny');
+    const voice = guardianVoices.bunny;
+    const msg = 'Hola, soy Bunny. Bienvenido a Guardianes de la Vida. Seleccioná el tipo de RCP y presioná Iniciar Guía.';
+    bubbleText.textContent = msg;
+    setTimeout(() => { if (voiceEnabled) speak(msg, voice.pitch, voice.rate); }, 600);
 });
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('SW registrado'))
-        .catch(err => console.error('Error SW', err));
+    navigator.serviceWorker.register('sw.js');
 }
