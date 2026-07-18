@@ -1,5 +1,5 @@
 // ========================
-//  GUARDIANES DE LA VIDA
+//  GUARDIANES DE LA VIDA ✨
 // ========================
 
 const stepsAdulto = [
@@ -41,20 +41,11 @@ const stepsBebe = [
   { title: "Paso 10: Continuar", text: "Repetí el ciclo hasta que llegue ayuda o el bebé se recupere.", metronome: true }
 ];
 
-// Voces de los guardianes
 const guardianVoices = {
     bunny: { pitch: 1.2, rate: 0.9 },
     hoodie: { pitch: 1.5, rate: 1.1 },
     astro: { pitch: 0.9, rate: 0.85 },
     pulse: { pitch: 1.0, rate: 0.95 }
-};
-
-// Frases de aliento aleatorias
-const guardianPhrases = {
-    bunny: ["Estoy con vos.", "Hagámoslo paso a paso.", "Lo estás haciendo muy bien.", "Respirá hondo."],
-    hoodie: ["¡Excelente!", "No te detengas.", "Mantené el ritmo.", "Cinco centímetros de profundidad."],
-    astro: ["Colocá los parches del DEA.", "Nadie debe tocar a la víctima.", "Seguí las instrucciones del equipo.", "Posición lateral de seguridad."],
-    pulse: ["Pedí ayuda a otra persona.", "Busquemos un desfibrilador.", "La ambulancia está en camino.", "Controlá el tiempo."]
 };
 
 let currentSteps = [], currentStep = 0, rcpType = 'adulto', rcpGender = 'masculino';
@@ -82,22 +73,13 @@ function getGuardianForStep(stepIndex) {
 function switchGuardian(guardian) {
     document.querySelectorAll('.guardian').forEach(g => g.style.display = 'none');
     document.getElementById(guardian).style.display = 'block';
-    // Frase de aliento
-    const phrases = guardianPhrases[guardian];
-    const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-    bubbleText.textContent = randomPhrase;
 }
 
-function updateAvatarState(state) {
-    const mouth = document.querySelector(`#${getGuardianForStep(currentStep)} .guardian-mouth`);
+function updateMouth(guardian, state) {
+    const mouth = document.querySelector(`#${guardian} .guardian-mouth`);
     if (mouth) {
         mouth.classList.remove('speaking');
         if (state === 'speaking') mouth.classList.add('speaking');
-    }
-    if (state === 'compressing') {
-        avatarContainer.classList.add('compress');
-    } else {
-        avatarContainer.classList.remove('compress');
     }
 }
 
@@ -109,14 +91,22 @@ function speak(text, pitch, rate) {
     const voices = window.speechSynthesis.getVoices();
     const pref = voices.find(v => v.lang.includes('es-AR')) || voices.find(v => v.lang.includes('es-ES'));
     if (pref) utterance.voice = pref;
-    updateAvatarState('speaking');
+
+    const guardian = getGuardianForStep(currentStep);
+    updateMouth(guardian, 'speaking');
+
     utterance.onend = () => {
+        updateMouth(guardian, 'idle');
         if (guideStarted && currentStep < currentSteps.length) {
             const step = currentSteps[currentStep];
-            updateAvatarState(step && step.metronome ? 'compressing' : 'idle');
-        } else updateAvatarState('idle');
+            if (step && step.metronome) {
+                avatarContainer.classList.add('compress');
+            } else {
+                avatarContainer.classList.remove('compress');
+            }
+        }
     };
-    utterance.onerror = () => updateAvatarState('idle');
+    utterance.onerror = () => updateMouth(guardian, 'idle');
     window.speechSynthesis.speak(utterance);
 }
 
@@ -154,8 +144,8 @@ function showStep(index) {
         bubbleText.textContent = step.text;
         const voice = guardianVoices[guardian];
         speak(step.text, voice.pitch, voice.rate);
-        if (step.metronome) { startMetronome(); updateAvatarState('compressing'); }
-        else { stopMetronome(); updateAvatarState('idle'); }
+        if (step.metronome) { startMetronome(); avatarContainer.classList.add('compress'); }
+        else { stopMetronome(); avatarContainer.classList.remove('compress'); }
         metronomeBox.style.display = step.metronome ? 'block' : 'none';
         nextBtn.textContent = (index === currentSteps.length - 1) ? '🔄 Repetir' : '⏭ Siguiente';
         nextBtn.disabled = false;
@@ -170,12 +160,6 @@ typeBtns.forEach(btn => {
         typeBtns.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         rcpType = btn.dataset.type;
-        if (!guideStarted) {
-            const voice = guardianVoices.bunny;
-            const msg = 'Soy Bunny, tu instructora. Seleccioná el tipo de RCP y presioná Iniciar Guía.';
-            bubbleText.textContent = msg;
-            if (voiceEnabled) speak(msg, voice.pitch, voice.rate);
-        }
     });
 });
 
