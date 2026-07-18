@@ -1,19 +1,200 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Guardianes de la Vida</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Guardianes de la Vida ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d0a1a">
 </head>
 <body>
-<!-- Pantallas según estructura proporcionada -->
-<section id="screen-select" class="screen active">...</section>
-<section id="screen-type" class="screen">...</section>
-<section id="screen-detect" class="screen">...</section>
-<section id="screen-guide" class="screen">...</section>
-<a href="tel:107" class="fixed-emergency-btn">📞 Llamar al 107</a>
-<script src="app.js"></script>
+
+    <!-- ============ SCREEN 1: GUARDIAN SELECTION ============ -->
+    <div id="screen-select" class="screen active">
+        <div class="screen-inner">
+            <div class="eyebrow">01 · Elegí tu guardián</div>
+            <h1 class="screen-title">¿Quién te va a guiar hoy?</h1>
+            <p class="screen-sub">Cada guardián te acompaña con su propia voz durante toda la emergencia.</p>
+
+            <div class="guardian-grid" id="guardian-grid">
+                <div class="guardian-card" data-guardian="bunny">
+                    <div class="mini-avatar av-bunny">
+                        <div class="g-ear l"></div>
+                        <div class="g-ear r"></div>
+                        <div class="g-helmet">
+                            <div class="g-star">✦</div>
+                            <div class="g-visor">
+                                <span class="g-eye talk"></span>
+                                <span class="g-eye talk"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guardian-name">Pandi</div>
+                    <div class="guardian-role">Calma y contención</div>
+                </div>
+
+                <div class="guardian-card" data-guardian="astro">
+                    <div class="mini-avatar av-astro">
+                        <div class="g-helmet">
+                            <div class="g-visor">
+                                <span class="g-eye talk"></span>
+                                <span class="g-eye talk"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guardian-name">Astro</div>
+                    <div class="guardian-role">Precisión técnica</div>
+                </div>
+
+                <div class="guardian-card" data-guardian="pulse">
+                    <div class="mini-avatar av-pulse">
+                        <div class="g-locs"></div>
+                        <div class="g-hp"></div>
+                        <div class="g-helmet">
+                            <div class="g-visor">
+                                <span class="g-eye talk"></span>
+                                <span class="g-eye talk"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guardian-name">Pulse</div>
+                    <div class="guardian-role">Ritmo y energía</div>
+                </div>
+
+                <div class="guardian-card" data-guardian="hoodie">
+                    <div class="mini-avatar av-hoodie">
+                        <div class="g-antenna l"></div>
+                        <div class="g-antenna r"></div>
+                        <div class="g-hood">
+                            <div class="g-visor">
+                                <span class="g-eye talk"></span>
+                                <span class="g-eye talk"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guardian-name">Hoodie</div>
+                    <div class="guardian-role">Firme y directo</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="to-type-btn" disabled>Continuar</button>
+        </div>
+    </div>
+
+    <!-- ============ SCREEN 2: TYPE SELECTION ============ -->
+    <div id="screen-type" class="screen">
+        <div class="screen-inner">
+            <div class="eyebrow">02 · A quién vas a ayudar</div>
+            <h1 class="screen-title">Elegí la edad de la víctima</h1>
+
+            <div class="type-grid" id="type-grid">
+                <div class="type-card" data-type="adulto">
+                    <span class="type-icon">🧑</span>
+                    <span>Adulto</span>
+                </div>
+                <div class="type-card" data-type="niño">
+                    <span class="type-icon">🧒</span>
+                    <span>Niño / Niña</span>
+                </div>
+                <div class="type-card" data-type="bebe">
+                    <span class="type-icon">👶</span>
+                    <span>Bebé</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="to-detect-btn">Continuar</button>
+            <button class="btn btn-ghost" id="back-to-select-btn">← Cambiar guardián</button>
+        </div>
+    </div>
+
+    <!-- ============ SCREEN 3: DETECTION (REDISEÑADA) ============ -->
+    <div id="screen-detect" class="screen">
+        <div class="detect-card">
+            <!-- Título -->
+            <h1 class="detect-title">¡EMERGENCIA CARDÍACA DETECTADA!</h1>
+
+            <!-- Fila avatar + burbuja -->
+            <div class="detect-avatar-row">
+                <div class="avatar-slot" id="avatar-detect"></div>
+                <div class="speech-bubble">
+                    <p id="detect-bubble-text"></p>
+                </div>
+            </div>
+
+            <!-- Sección Verificar Respiración -->
+            <div class="vital-card">
+                <div class="vital-header">Verificar Respiración</div>
+                <div class="vital-data">
+                    <span class="bpm"><strong>70</strong> bpm</span>
+                    <span class="signal-quality">Signal Quality: <span id="signal-quality">89</span>/100</span>
+                </div>
+            </div>
+
+            <!-- History -->
+            <div class="history-card">
+                <span class="history-label">History</span>
+                <span class="history-value" id="history-value">Normal - Oct 24, 10:00 pm</span>
+            </div>
+
+            <!-- Quick-check -->
+            <div class="quickcheck-box">
+                <div class="quickcheck-header">
+                    <span>Quick-check</span>
+                    <span id="quickcheck-date"></span>
+                </div>
+                <div class="quickcheck-status">
+                    <span class="status-pill" id="status-conciencia" data-check="conciencia">● No respondida</span>
+                    <span class="status-pill" id="status-respiracion" data-check="respiracion">● No respondida</span>
+                </div>
+            </div>
+
+            <!-- Botón INICIAR RCP -->
+            <button class="btn-emergency-cta" id="start-rcp-btn" disabled>INICIAR RCP</button>
+
+            <!-- Lista de pasos (Compresiones) -->
+            <div class="steps-preview">
+                <div class="step-item">1. Compresiones</div>
+                <div class="step-item">2. Compresiones</div>
+                <div class="step-item">3. Compresiones</div>
+                <div class="step-item">4. Compresiones</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SCREEN 4: GUIDE ============ -->
+    <div id="screen-guide" class="screen">
+        <div class="guide-card">
+            <div class="guide-top">
+                <div class="guide-step-label" id="guide-step-label">Paso 1 / 10</div>
+                <button class="voice-toggle" id="voice-btn">🔊</button>
+            </div>
+
+            <div class="avatar-area">
+                <div class="avatar-slot avatar-slot-lg" id="avatar-guide"></div>
+                <div class="speech-bubble" id="guide-bubble">
+                    <p id="guide-bubble-text"></p>
+                </div>
+            </div>
+
+            <div class="metronome-box" id="metronome-box">
+                <div>🎵 Ritmo de compresión · 100–120/min</div>
+                <div class="metro-controls">
+                    <button class="metro-btn" id="metro-start">▶ Iniciar ritmo</button>
+                    <button class="metro-btn" id="metro-stop" disabled>⏹ Parar</button>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="next-btn">Siguiente ⏭</button>
+        </div>
+    </div>
+
+    <!-- ============ FIXED EMERGENCY BUTTON ============ -->
+    <a href="tel:107" class="fixed-emergency-btn">📞 Llamar al 107</a>
+
+    <script src="app.js"></script>
 </body>
 </html>
