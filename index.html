@@ -1,106 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Guardianes de la Vida ✨</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a1a2e">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Guardianes de la Vida</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
-        <div class="avatar-area">
-            <div id="avatar-container" class="avatar-container">
-                <!-- 🐰 Bunny -->
-                <div id="bunny" class="guardian" style="display:none;">
-                    <div class="bunny-ears">
-                        <div class="ear left"></div><div class="ear right"></div>
-                    </div>
-                    <div class="guardian-head" style="background:#ffe0e0;">
-                        <div class="guardian-eyes">
-                            <div class="eye left"><div class="pupil"></div></div>
-                            <div class="eye right"><div class="pupil"></div></div>
-                        </div>
-                        <div class="guardian-mouth"></div>
-                        <div class="guardian-blush left"></div><div class="guardian-blush right"></div>
-                    </div>
-                </div>
-
-                <!-- 🩶 Hoodie -->
-                <div id="hoodie" class="guardian" style="display:none;">
-                    <div class="hoodie-hood"></div>
-                    <div class="guardian-head" style="background:#ffcc80;">
-                        <div class="guardian-eyes">
-                            <div class="eye left"><div class="pupil"></div></div>
-                            <div class="eye right"><div class="pupil"></div></div>
-                        </div>
-                        <div class="guardian-mouth"></div>
-                    </div>
-                    <div class="hoodie-body"></div>
-                </div>
-
-                <!-- 🚀 Astro -->
-                <div id="astro" class="guardian" style="display:none;">
-                    <div class="astro-visor"></div>
-                    <div class="guardian-head" style="background:#37474f;">
-                        <div class="guardian-eyes" style="background:#00e5ff;">
-                            <div class="eye left"><div class="pupil"></div></div>
-                            <div class="eye right"><div class="pupil"></div></div>
-                        </div>
-                        <div class="guardian-mouth" style="background:#00e5ff;"></div>
-                    </div>
-                </div>
-
-                <!-- 🎧 Pulse -->
-                <div id="pulse" class="guardian" style="display:none;">
-                    <div class="pulse-headphones"></div>
-                    <div class="guardian-head" style="background:#cfd8dc;">
-                        <div class="guardian-eyes">
-                            <div class="eye left"><div class="pupil"></div></div>
-                            <div class="eye right"><div class="pupil"></div></div>
-                        </div>
-                        <div class="guardian-mouth" style="background:#0288d1;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="speech-bubble" class="speech-bubble">
-                <p id="bubble-text"></p>
-            </div>
-        </div>
-
-        <div class="type-selector">
-            <button class="type-btn selected" data-type="adulto">🧑 Adulto</button>
-            <button class="type-btn" data-type="niño">🧒 Niño</button>
-            <button class="type-btn" data-type="bebe">👶 Bebé</button>
-        </div>
-        <div class="gender-selector">
-            <button class="gender-btn active" data-gender="masculino">♂️</button>
-            <button class="gender-btn" data-gender="femenino">♀️</button>
-        </div>
-
-        <div class="controls">
-            <button id="start-btn" class="btn btn-start">▶ Iniciar Guía</button>
-            <div id="nav-btns" style="display:none;">
-                <button id="back-btn" class="btn btn-back">⬅️ Atrás</button>
-                <button id="next-btn" class="btn btn-next" disabled>⏭ Siguiente</button>
-            </div>
-            <button id="home-btn" class="btn btn-home" style="display:none;">🏠 Volver al inicio</button>
-            <button id="voice-btn" class="btn btn-voice">🔊 Voz: Activada</button>
-        </div>
-
-        <div id="metronome-box" class="metronome-box" style="display: none;">
-            <p>🎵 Ritmo 100‑120/min</p>
-            <button id="metro-start" class="metro-btn">▶ Iniciar</button>
-            <button id="metro-stop" class="metro-btn" disabled>⏹ Parar</button>
-        </div>
-
-        <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
-        <p class="disclaimer">Guardianes de la Vida · Asistente virtual de emergencias</p>
-    </div>
-
-    <script src="app.js"></script>
+<!-- Pantallas según estructura proporcionada -->
+<section id="screen-select" class="screen active">...</section>
+<section id="screen-type" class="screen">...</section>
+<section id="screen-detect" class="screen">...</section>
+<section id="screen-guide" class="screen">...</section>
+<a href="tel:107" class="fixed-emergency-btn">📞 Llamar al 107</a>
+<script src="app.js"></script>
 </body>
 </html>
