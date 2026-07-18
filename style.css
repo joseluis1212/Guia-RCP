@@ -28,71 +28,49 @@ body {
     text-align: center; border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* AVATAR */
+/* AVATAR MÉDICO CHIBI (CSS puro) */
 .avatar-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
-.avatar-container { 
-    width: 130px; height: 130px; position: relative; 
-    animation: breatheAndFloat 5s ease-in-out infinite; cursor: pointer; 
+.avatar-container { width: 150px; height: 200px; position: relative; margin: 0 auto; cursor: pointer; }
+.chibi-medic { width: 100%; height: 100%; position: relative; animation: floatChibi 3s ease-in-out infinite; }
+@keyframes floatChibi {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
 }
-@keyframes breatheAndFloat {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-6px) scale(1.03); }
-}
-.avatar-head {
-    width: 100%; height: 100%; border-radius: 50%;
-    background: #fce0c6; position: relative;
-    box-shadow: 0 0 25px rgba(255, 180, 160, 0.5), 0 8px 18px rgba(0,0,0,0.4);
-    transition: background 0.3s, box-shadow 0.3s;
-}
+.chibi-body { position: relative; width: 100%; height: 100%; }
+
+/* Cabeza */
+.chibi-head { width: 100px; height: 100px; background: #fce0c6; border-radius: 50%; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 2; }
+.chibi-hair { width: 100px; height: 50px; background: #4a2c2c; border-radius: 50% 50% 0 0; position: absolute; top: 5px; left: 0; }
+.chibi-face { position: relative; top: 50px; }
 
 /* Ojos */
-.avatar-eyes { position: absolute; top: 42px; left: 50%; transform: translateX(-50%); display: flex; gap: 24px; }
-.avatar-eye { width: 24px; height: 28px; background: #4a2c2c; border-radius: 50%; position: relative; overflow: hidden; }
-.pupil { width: 9px; height: 11px; background: white; border-radius: 50%; position: absolute; top: 5px; left: 7px; transition: transform 0.15s ease; }
-.eyelid {
-    position: absolute; top: 0; left: 0; width: 100%; height: 50%;
-    background: #fce0c6; /* se actualiza con JS */
-    animation: blink 4s infinite; z-index: 2;
-}
-@keyframes blink {
-    0%, 90%, 100% { transform: scaleY(0); }
-    95% { transform: scaleY(1); }
-}
-
-/* Cejas */
-.avatar-eyebrows { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); display: flex; gap: 28px; }
-.eyebrow { width: 16px; height: 5px; background: #4a2c2c; border-radius: 3px; transition: transform 0.2s; }
+.chibi-eyes { display: flex; justify-content: center; gap: 20px; margin-top: 5px; }
+.chibi-eye { width: 18px; height: 22px; background: #333; border-radius: 50%; position: relative; overflow: hidden; }
+.pupil { width: 7px; height: 9px; background: white; border-radius: 50%; position: absolute; top: 4px; left: 5px; }
 
 /* Boca */
-.avatar-mouth { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); width: 20px; height: 9px; background: #c26b6b; border-radius: 0 0 12px 12px; transition: all 0.2s; }
-.avatar-mouth.speaking { width: 24px; height: 5px; border-radius: 10px; background: #a04a4a; animation: talk 0.3s infinite; }
-.avatar-mouth.worried { width: 16px; height: 10px; background: transparent; border-bottom: 3px solid #a04a4a; border-radius: 0; }
-.avatar-mouth.relieved { width: 22px; height: 10px; border-radius: 0 0 15px 15px; background: #e08a8a; }
-
+.chibi-mouth { width: 14px; height: 7px; background: #c26b6b; border-radius: 0 0 8px 8px; margin: 8px auto 0; transition: all 0.2s; }
+.chibi-mouth.speaking { width: 18px; height: 4px; border-radius: 10px; background: #a04a4a; animation: talk 0.25s infinite; }
 @keyframes talk {
-    0%, 100% { height: 8px; border-radius: 0 0 10px 10px; }
-    50% { height: 4px; border-radius: 10px; }
+    0%, 100% { height: 7px; }
+    50% { height: 3px; }
 }
 
 /* Mejillas */
-.avatar-blush { width: 18px; height: 12px; background: rgba(255, 140, 140, 0.4); border-radius: 50%; position: absolute; top: 62px; }
-.avatar-blush.left { left: 14px; } .avatar-blush.right { right: 14px; }
+.chibi-blush { width: 12px; height: 8px; background: rgba(255, 150, 150, 0.5); border-radius: 50%; position: absolute; top: 18px; }
+.chibi-blush.left { left: -25px; }
+.chibi-blush.right { right: -25px; }
 
-/* Accesorio */
-.avatar-accessory { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 32px; transition: all 0.3s; }
+/* Bata */
+.chibi-coat { width: 80px; height: 70px; background: white; border-radius: 10px 10px 0 0; position: absolute; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1; }
 
-/* Mano que señala */
-.avatar-hand {
-    position: absolute; top: 50%; left: 50%;
-    font-size: 32px;
-    transform: translate(-50%, -50%) rotate(0deg);
-    opacity: 0; transition: opacity 0.3s, transform 0.3s;
-    pointer-events: none;
-}
-.avatar-hand.pointing {
-    opacity: 1;
-    transform: translate(70px, -30px) rotate(-20deg);
-}
+/* Estetoscopio */
+.chibi-stethoscope { width: 40px; height: 15px; background: #666; border-radius: 10px; position: absolute; top: 110px; left: 30px; z-index: 3; transform: rotate(-20deg); }
+.chibi-stethoscope::after { content: ''; width: 8px; height: 8px; background: #888; border-radius: 50%; position: absolute; right: -5px; top: 3px; }
+
+/* Tableta */
+.chibi-tablet { width: 30px; height: 40px; background: #333; border-radius: 4px; position: absolute; top: 105px; right: 40px; z-index: 3; }
+.chibi-tablet::after { content: ''; width: 26px; height: 20px; background: #a8dadc; border-radius: 2px; position: absolute; top: 3px; left: 2px; }
 
 /* Rebote al ritmo del metrónomo */
 @keyframes compressBounce {
@@ -100,8 +78,8 @@ body {
     50% { transform: translateY(6px) scaleY(0.92); }
     100% { transform: translateY(0) scaleY(1); }
 }
-.avatar-container.compress {
-    animation: compressBounce 0.545s infinite; /* 110 BPM */
+.avatar-container.compress .chibi-medic {
+    animation: compressBounce 0.545s infinite;
 }
 
 /* Globo */
@@ -111,13 +89,12 @@ body {
 
 /* Selectores */
 .type-selector, .gender-selector { display: flex; gap: 10px; justify-content: center; margin: 12px 0; }
-.type-btn, .gender-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 10px 16px; cursor: pointer; transition: all 0.25s; color: #ccc; font-weight: 600; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px); }
+.type-btn, .gender-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 10px 16px; cursor: pointer; transition: all 0.25s; color: #ccc; font-weight: 600; }
 .type-btn.selected, .gender-btn.active { background: rgba(168, 218, 220, 0.2); border-color: var(--celeste); color: white; box-shadow: 0 0 14px rgba(168,218,220,0.3); }
-.type-emoji { font-size: 1.3rem; }
 
 /* Botones */
 .btn { width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+.btn:disabled { opacity: 0.4; cursor: default; }
 .btn-start { background: var(--verde); color: #111; box-shadow: 0 6px 16px rgba(6,214,160,0.3); }
 .btn-next { background: var(--amarillo); color: #222; box-shadow: 0 6px 16px rgba(255,209,102,0.3); }
 .btn-voice { background: rgba(255,255,255,0.08); color: #eee; border: 1px solid rgba(255,255,255,0.2); }
