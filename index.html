@@ -1,102 +1,157 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Guardianes de la Vida ✨</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a1a2e">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Guardianes de la Vida</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0d0a1a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
-        <div class="avatar-area">
-            <div id="avatar-container" class="avatar-container">
-                <!-- 🐰 Bunny -->
-                <div id="bunny" class="guardian">
-                    <div class="bunny-ears">
-                        <div class="ear left"></div><div class="ear right"></div>
-                    </div>
-                    <div class="guardian-head" style="background:#ffe0e0;">
-                        <div class="guardian-eyes">
-                            <div class="eye left"><div class="pupil"></div></div>
-                            <div class="eye right"><div class="pupil"></div></div>
-                        </div>
-                        <div class="guardian-mouth"></div>
-                        <div class="guardian-blush left"></div><div class="guardian-blush right"></div>
-                    </div>
-                </div>
 
-                <!-- 🩶 Hoodie -->
-                <div id="hoodie" class="guardian" style="display:none;">
-                    <div class="hoodie-hood"></div>
-                    <div class="guardian-head" style="background:#ffcc80;">
-                        <div class="guardian-eyes">
-                            <div class="eye left"><div class="pupil"></div></div>
-                            <div class="eye right"><div class="pupil"></div></div>
-                        </div>
-                        <div class="guardian-mouth"></div>
-                    </div>
-                    <div class="hoodie-body"></div>
-                </div>
+<!-- ============ PANTALLA 1: SELECCIÓN DE GUARDIÁN ============ -->
+<section id="screen-select" class="screen active">
+  <div class="screen-inner">
+    <p class="eyebrow">01 · Elegí tu guardián</p>
+    <h1 class="screen-title">¿Quién te va a<br>guiar hoy?</h1>
+    <p class="screen-sub">Cada guardián te acompaña con su propia voz durante toda la emergencia.</p>
 
-                <!-- 🚀 Astro -->
-                <div id="astro" class="guardian" style="display:none;">
-                    <div class="astro-visor"></div>
-                    <div class="guardian-head" style="background:#37474f;">
-                        <div class="guardian-eyes" style="background:#00e5ff;">
-                            <div class="eye left"><div class="pupil"></div></div>
-                            <div class="eye right"><div class="pupil"></div></div>
-                        </div>
-                        <div class="guardian-mouth" style="background:#00e5ff;"></div>
-                    </div>
-                </div>
-
-                <!-- 🎧 Pulse -->
-                <div id="pulse" class="guardian" style="display:none;">
-                    <div class="pulse-headphones"></div>
-                    <div class="guardian-head" style="background:#cfd8dc;">
-                        <div class="guardian-eyes">
-                            <div class="eye left"><div class="pupil"></div></div>
-                            <div class="eye right"><div class="pupil"></div></div>
-                        </div>
-                        <div class="guardian-mouth" style="background:#0288d1;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="speech-bubble" class="speech-bubble">
-                <p id="bubble-text"></p>
-            </div>
+    <div id="guardian-grid" class="guardian-grid">
+      <button class="guardian-card" data-guardian="bunny">
+        <div class="mini-avatar mini-bunny">
+          <div class="mini-ear l"></div><div class="mini-ear r"></div>
+          <div class="mini-helmet mini-helmet-cream"><div class="mini-visor"><span class="mini-eye"></span><span class="mini-eye"></span></div></div>
         </div>
+        <span class="guardian-name">Pandi</span>
+        <span class="guardian-role">Calma y contención</span>
+      </button>
 
-        <div class="type-selector">
-            <button class="type-btn selected" data-type="adulto">🧑 Adulto</button>
-            <button class="type-btn" data-type="niño">🧒 Niño</button>
-            <button class="type-btn" data-type="bebe">👶 Bebé</button>
+      <button class="guardian-card" data-guardian="astro">
+        <div class="mini-avatar mini-astro">
+          <div class="mini-helmet mini-helmet-white"><div class="mini-visor mini-visor-dark"><span class="mini-eye glow-orange"></span><span class="mini-eye glow-orange"></span></div></div>
         </div>
-        <div class="gender-selector">
-            <button class="gender-btn active" data-gender="masculino">♂️</button>
-            <button class="gender-btn" data-gender="femenino">♀️</button>
-        </div>
+        <span class="guardian-name">Astro</span>
+        <span class="guardian-role">Precisión técnica</span>
+      </button>
 
-        <div class="controls">
-            <button id="start-btn" class="btn btn-start">▶ Iniciar Guía</button>
-            <button id="next-btn" class="btn btn-next" disabled style="display:none;">⏭ Siguiente</button>
-            <button id="voice-btn" class="btn btn-voice">🔊 Voz: Activada</button>
+      <button class="guardian-card" data-guardian="pulse">
+        <div class="mini-avatar mini-pulse">
+          <div class="mini-locs"></div>
+          <div class="mini-headphone"></div>
+          <div class="mini-helmet mini-helmet-cyan"><div class="mini-visor mini-visor-dark"><span class="mini-eye glow-cyan"></span><span class="mini-eye glow-cyan"></span></div></div>
         </div>
+        <span class="guardian-name">Pulse</span>
+        <span class="guardian-role">Ritmo y energía</span>
+      </button>
 
-        <div id="metronome-box" class="metronome-box" style="display: none;">
-            <p>🎵 Ritmo 100‑120/min</p>
-            <button id="metro-start" class="metro-btn">▶ Iniciar</button>
-            <button id="metro-stop" class="metro-btn" disabled>⏹ Parar</button>
+      <button class="guardian-card" data-guardian="hoodie">
+        <div class="mini-avatar mini-hoodie">
+          <div class="mini-antenna l"></div><div class="mini-antenna r"></div>
+          <div class="mini-hood"><span class="mini-eye glow-pink"></span><span class="mini-eye glow-pink"></span></div>
         </div>
-
-        <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
-        <p class="disclaimer">Guardianes de la Vida · Asistente virtual de emergencias</p>
+        <span class="guardian-name">Hoodie</span>
+        <span class="guardian-role">Firme y directo</span>
+      </button>
     </div>
 
-    <script src="app.js"></script>
+    <button id="to-type-btn" class="btn btn-primary" disabled>Continuar</button>
+  </div>
+</section>
+
+<!-- ============ PANTALLA 2: TIPO DE VÍCTIMA ============ -->
+<section id="screen-type" class="screen">
+  <div class="screen-inner">
+    <p class="eyebrow">02 · A quién vas a ayudar</p>
+    <h1 class="screen-title">Elegí la edad<br>de la víctima</h1>
+
+    <div class="type-grid">
+      <button class="type-card selected" data-type="adulto">
+        <span class="type-icon">🧑</span><span>Adulto</span>
+      </button>
+      <button class="type-card" data-type="niño">
+        <span class="type-icon">🧒</span><span>Niño / Niña</span>
+      </button>
+      <button class="type-card" data-type="bebe">
+        <span class="type-icon">👶</span><span>Bebé</span>
+      </button>
+    </div>
+
+    <button id="to-detect-btn" class="btn btn-primary">Continuar</button>
+    <button id="back-to-select-btn" class="btn btn-ghost">← Cambiar guardián</button>
+  </div>
+</section>
+
+<!-- ============ PANTALLA 3: EMERGENCIA DETECTADA ============ -->
+<section id="screen-detect" class="screen">
+  <div class="detect-card">
+    <h1 class="detect-title">¡EMERGENCIA<br>CARDÍACA DETECTADA!</h1>
+
+    <div class="detect-avatar-row">
+      <div id="avatar-detect" class="avatar-slot"></div>
+      <div class="speech-bubble" id="detect-bubble">
+        <p id="detect-bubble-text">¡Hola! Soy tu guardián. Estás ante una emergencia, pero yo te guío paso a paso.</p>
+      </div>
+    </div>
+
+    <div class="check-row">
+      <button id="check-conciencia" class="check-card">
+        <span class="check-icon">🫱</span>
+        <span>Verificar<br>Conciencia</span>
+      </button>
+      <button id="check-respiracion" class="check-card">
+        <span class="check-icon">👂</span>
+        <span>Verificar<br>Respiración</span>
+      </button>
+    </div>
+
+    <button id="start-rcp-btn" class="btn btn-emergency-cta">INICIAR RCP</button>
+
+    <div class="quickcheck-box">
+      <div class="quickcheck-header">
+        <span>Quick-check</span>
+        <span id="quickcheck-date"></span>
+      </div>
+      <div class="quickcheck-status">
+        <span id="status-conciencia" class="status-pill">● No responde</span>
+        <span id="status-respiracion" class="status-pill">● No respira</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PANTALLA 4: GUÍA PASO A PASO ============ -->
+<section id="screen-guide" class="screen">
+  <div class="guide-card">
+    <div class="guide-top">
+      <span id="guide-step-label" class="guide-step-label">Paso 1 / 10</span>
+      <button id="voice-btn" class="voice-toggle" title="Voz">🔊</button>
+    </div>
+
+    <div class="avatar-area">
+      <div id="avatar-guide" class="avatar-slot avatar-slot-lg"></div>
+      <div class="speech-bubble" id="guide-bubble">
+        <p id="guide-bubble-text"></p>
+      </div>
+    </div>
+
+    <div id="metronome-box" class="metronome-box">
+      <p>🎵 Ritmo de compresión · 100–120/min</p>
+      <div class="metro-controls">
+        <button id="metro-start" class="metro-btn">▶ Iniciar ritmo</button>
+        <button id="metro-stop" class="metro-btn" disabled>⏹ Parar</button>
+      </div>
+    </div>
+
+    <button id="next-btn" class="btn btn-primary">Siguiente ⏭</button>
+  </div>
+</section>
+
+<!-- ============ BOTÓN DE EMERGENCIA FIJO ============ -->
+<a href="tel:107" class="fixed-emergency-btn">📞 Llamar al 107</a>
+
+<script src="app.js"></script>
 </body>
-    </html>
+</html>
