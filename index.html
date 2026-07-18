@@ -14,20 +14,26 @@
         <!-- Área del avatar -->
         <div class="avatar-area">
             <div id="avatar-container" class="avatar-container">
-                <div id="avatar-head" class="avatar-head">
-                    <div class="avatar-eyes">
-                        <div class="avatar-eye left"><div class="eyelid"></div><div class="pupil"></div></div>
-                        <div class="avatar-eye right"><div class="eyelid"></div><div class="pupil"></div></div>
+                <!-- Avatar CSS del médico chibi -->
+                <div id="chibi-medic" class="chibi-medic">
+                    <div class="chibi-body">
+                        <div class="chibi-head">
+                            <div class="chibi-hair"></div>
+                            <div class="chibi-face">
+                                <div class="chibi-eyes">
+                                    <div class="chibi-eye left"><div class="pupil"></div></div>
+                                    <div class="chibi-eye right"><div class="pupil"></div></div>
+                                </div>
+                                <div class="chibi-mouth"></div>
+                                <div class="chibi-blush left"></div>
+                                <div class="chibi-blush right"></div>
+                            </div>
+                        </div>
+                        <div class="chibi-coat"></div>
+                        <div class="chibi-stethoscope"></div>
+                        <div class="chibi-tablet"></div>
                     </div>
-                    <div id="avatar-eyebrows" class="avatar-eyebrows">
-                        <div class="eyebrow left"></div><div class="eyebrow right"></div>
-                    </div>
-                    <div id="avatar-mouth" class="avatar-mouth"></div>
-                    <div class="avatar-blush left"></div><div class="avatar-blush right"></div>
-                    <div id="avatar-accessory" class="avatar-accessory"></div>
                 </div>
-                <!-- Mano que señala -->
-                <div id="avatar-hand" class="avatar-hand">🖐️</div>
             </div>
             <div id="speech-bubble" class="speech-bubble">
                 <p id="bubble-text"></p>
@@ -36,9 +42,9 @@
 
         <!-- Selectores -->
         <div class="type-selector">
-            <button class="type-btn" data-type="adulto" data-gender="masculino"><span class="type-emoji">👨‍⚕️</span> Adulto</button>
-            <button class="type-btn selected" data-type="niño" data-gender="masculino"><span class="type-emoji">🧒</span> Niño</button>
-            <button class="type-btn" data-type="bebe" data-gender="femenino"><span class="type-emoji">👶</span> Bebé</button>
+            <button class="type-btn selected" data-type="adulto">🧑 Adulto</button>
+            <button class="type-btn" data-type="niño">🧒 Niño</button>
+            <button class="type-btn" data-type="bebe">👶 Bebé</button>
         </div>
         <div class="gender-selector">
             <button class="gender-btn active" data-gender="masculino">♂️</button>
