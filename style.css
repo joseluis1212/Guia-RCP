@@ -384,7 +384,7 @@ body {
     font-size: 1.6rem;
 }
 
-/* ===== NUEVA PANTALLA DE DETECCIÓN (ESTILO IMAGEN) ===== */
+/* ===== DETECTION SCREEN ===== */
 #screen-detect.active {
     display: flex;
     justify-content: center;
@@ -466,7 +466,6 @@ body {
     line-height: 1.4;
 }
 
-/* Tarjeta de Verificar Respiración */
 .vital-card {
     background: rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-md);
@@ -497,7 +496,6 @@ body {
     color: var(--text-dim);
 }
 
-/* History */
 .history-card {
     background: rgba(255, 255, 255, 0.04);
     border-radius: var(--radius-md);
@@ -515,7 +513,6 @@ body {
     color: #fff;
 }
 
-/* Quick-check (rediseñado) */
 .quickcheck-box {
     background: rgba(255, 255, 255, 0.04);
     border-radius: var(--radius-md);
@@ -544,6 +541,7 @@ body {
     border-radius: 20px;
     background: rgba(255, 77, 77, 0.1);
     border: 1px solid transparent;
+    user-select: none;
 }
 .status-pill.ok {
     color: var(--green);
@@ -553,8 +551,10 @@ body {
 .status-pill:hover {
     background: rgba(255, 255, 255, 0.08);
 }
+.status-pill.ok:hover {
+    background: rgba(6, 214, 160, 0.25);
+}
 
-/* Botón INICIAR RCP */
 .btn-emergency-cta {
     width: 100%;
     padding: 18px;
@@ -594,7 +594,6 @@ body {
     }
 }
 
-/* Lista de pasos (Compresiones) */
 .steps-preview {
     display: grid;
     grid-template-columns: 1fr 1fr;
