@@ -1,11 +1,11 @@
 /* ============================================================
-   GUARDIANES DE LA VIDA - APP COMPLETA (VERSIÓN REDISEÑADA)
+   GUARDIANES DE LA VIDA - APP COMPLETA (VERSIÓN CORREGIDA)
    ============================================================ */
 
 // -------- ESTADO GLOBAL --------
 const state = {
-    guardian: null,       // 'bunny', 'astro', 'pulse', 'hoodie'
-    type: null,           // 'adulto', 'niño', 'bebe'
+    guardian: null,
+    type: null,
     conciencia: false,
     respiracion: false,
     currentStep: 0,
@@ -103,15 +103,19 @@ function showScreen(name) {
     Object.keys(screens).forEach(key => {
         screens[key].classList.toggle('active', key === name);
     });
+    // Detener metrónomo al salir de la guía
+    if (name !== 'guide') {
+        stopMetronome();
+    }
 }
 
 // -------- AVATAR BUILDER --------
 function buildAvatarHTML(guardianKey, size = 'normal') {
     const data = GUARDIAN_DATA[guardianKey];
-    if (!data) return '';
+    if (!data) return '<div style="color:#fff;">👤</div>';
     const base = data.avatarClass;
-    let html = `<div class="avatar-slot ${size === 'lg' ? 'avatar-slot-lg' : ''}" style="position:relative;">`;
-    html += `<div class="mini-avatar ${base}" style="transform:scale(1.2);">`;
+    const scale = size === 'lg' ? 'scale(1.4)' : 'scale(1.2)';
+    let html = `<div class="mini-avatar ${base}" style="transform:${scale};margin:0 auto;">`;
 
     switch (guardianKey) {
         case 'bunny':
@@ -162,9 +166,9 @@ function buildAvatarHTML(guardianKey, size = 'normal') {
             `;
             break;
         default:
-            html += `<div style="color:#fff;">👤</div>`;
+            html += `<div style="color:#fff;font-size:2rem;text-align:center;padding-top:20px;">👤</div>`;
     }
-    html += `</div></div>`;
+    html += `</div>`;
     return html;
 }
 
@@ -174,15 +178,30 @@ function renderAvatar(container, guardianKey, size = 'normal') {
 }
 
 // -------- ACTUALIZAR BURBUJAS Y VOZ --------
+let speechTimeout = null;
+
 function speakText(text, force = false) {
     if (!state.voiceEnabled && !force) return;
     if (!window.speechSynthesis) return;
+    
+    // Limpiar cualquier speech pendiente
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-ES';
-    utterance.rate = 0.95;
-    utterance.pitch = 1.1;
-    window.speechSynthesis.speak(utterance);
+    if (speechTimeout) {
+        clearTimeout(speechTimeout);
+        speechTimeout = null;
+    }
+    
+    // Pequeño delay para evitar que se encolen mensajes vacíos
+    speechTimeout = setTimeout(() => {
+        if (text && text.trim().length > 0) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.95;
+            utterance.pitch = 1.1;
+            window.speechSynthesis.speak(utterance);
+        }
+        speechTimeout = null;
+    }, 100);
 }
 
 function updateDetectBubble(text) {
@@ -247,6 +266,7 @@ toDetectBtn.addEventListener('click', () => {
     statusRespiracion.textContent = '● No respondida';
     statusRespiracion.classList.remove('ok');
     startRcpBtn.disabled = true;
+    startRcpBtn.textContent = 'INICIAR RCP';
 
     renderAvatar(avatarDetect, state.guardian, 'normal');
     const data = GUARDIAN_DATA[state.guardian];
@@ -255,7 +275,6 @@ toDetectBtn.addEventListener('click', () => {
 
     const now = new Date();
     quickcheckDate.textContent = now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-    // Actualizar señal de calidad (simulada)
     signalQuality.textContent = Math.floor(80 + Math.random() * 19);
 
     showScreen('detect');
@@ -267,24 +286,27 @@ backToSelectBtn.addEventListener('click', () => {
     state.type = null;
 });
 
-// -------- QUICK-CHECK INTERACTIVO (NUEVO) --------
-// Al hacer clic en los ítems de quick-check, se marcan como "Respondida"
-statusConciencia.addEventListener('click', () => {
-    if (state.conciencia) return;
-    state.conciencia = true;
-    statusConciencia.textContent = '● Respondida';
-    statusConciencia.classList.add('ok');
-    updateDetectBubble('✅ La persona responde. Si no hay lesión, mantenela tranquila. Si no responde, continuá.');
+// -------- QUICK-CHECK INTERACTIVO --------
+function handleQuickCheck(element, checkType) {
+    if (state[checkType]) return; // ya está respondido
+    
+    state[checkType] = true;
+    element.textContent = '● Respondida';
+    element.classList.add('ok');
+    
+    const msg = checkType === 'conciencia' 
+        ? '✅ La persona responde. Si no hay lesión, mantenela tranquila. Si no responde, continuá.'
+        : '✅ La persona respira. Colocala en posición lateral de seguridad. Si no respira, iniciá RCP.';
+    updateDetectBubble(msg);
     evaluateRCPReady();
+}
+
+statusConciencia.addEventListener('click', () => {
+    handleQuickCheck(statusConciencia, 'conciencia');
 });
 
 statusRespiracion.addEventListener('click', () => {
-    if (state.respiracion) return;
-    state.respiracion = true;
-    statusRespiracion.textContent = '● Respondida';
-    statusRespiracion.classList.add('ok');
-    updateDetectBubble('✅ La persona respira. Colocala en posición lateral de seguridad. Si no respira, iniciá RCP.');
-    evaluateRCPReady();
+    handleQuickCheck(statusRespiracion, 'respiracion');
 });
 
 function evaluateRCPReady() {
@@ -316,14 +338,19 @@ function showStep(index) {
     const total = steps.length;
     if (index >= total) {
         guideStepLabel.textContent = '✅ COMPLETADO';
-        guideBubble.textContent = '¡Excelente! Has completado todos los pasos. No pares hasta que llegue la ayuda.';
-        speakText('¡Excelente! Has completado todos los pasos. No pares hasta que llegue la ayuda.');
+        const msg = '¡Excelente! Has completado todos los pasos. No pares hasta que llegue la ayuda.';
+        guideBubble.textContent = msg;
+        speakText(msg);
         nextBtn.textContent = '🔄 Reiniciar';
         nextBtn.onclick = () => {
+            // Reiniciar completamente la guía
             state.currentStep = 0;
+            state._steps = getStepsForType(state.type);
             showStep(0);
             nextBtn.textContent = 'Siguiente ⏭';
             nextBtn.onclick = nextStep;
+            // Detener metrónomo al reiniciar
+            stopMetronome();
         };
         return;
     }
@@ -387,6 +414,7 @@ function stopMetronome() {
     state.metronomeRunning = false;
     metroStart.disabled = false;
     metroStop.disabled = true;
+    metroStart.style.transform = 'scale(1)';
 }
 
 metroStart.addEventListener('click', startMetronome);
@@ -421,4 +449,4 @@ function init() {
 }
 
 init();
-console.log('🚀 Guardianes de la Vida (versión rediseñada) cargado correctamente.');
+console.log('🚀 Guardianes de la Vida (versión corregida) cargado correctamente.');
