@@ -10,7 +10,6 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
     font-family: 'Nunito', sans-serif;
     background: var(--bg);
@@ -19,92 +18,70 @@ body {
     display: flex; justify-content: center; align-items: center;
     min-height: 100vh; padding: 20px; overflow-x: hidden;
 }
-
 .app-container {
     max-width: 420px; width: 100%;
     background: var(--card-bg); backdrop-filter: blur(20px);
     border-radius: 36px; padding: 24px 20px 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     text-align: center; border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* AVATAR MÉDICO CHIBI (CSS puro) */
+/* AVATAR */
 .avatar-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
-.avatar-container { width: 150px; height: 200px; position: relative; margin: 0 auto; cursor: pointer; }
-.chibi-medic { width: 100%; height: 100%; position: relative; animation: floatChibi 3s ease-in-out infinite; }
-@keyframes floatChibi {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+.avatar-container { width: 140px; height: 180px; position: relative; margin: 0 auto; }
+.guardian { position: absolute; top: 0; left: 0; width: 100%; height: 100%; animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+.guardian-head {
+    width: 100px; height: 100px; border-radius: 50%;
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
-.chibi-body { position: relative; width: 100%; height: 100%; }
-
-/* Cabeza */
-.chibi-head { width: 100px; height: 100px; background: #fce0c6; border-radius: 50%; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 2; }
-.chibi-hair { width: 100px; height: 50px; background: #4a2c2c; border-radius: 50% 50% 0 0; position: absolute; top: 5px; left: 0; }
-.chibi-face { position: relative; top: 50px; }
-
-/* Ojos */
-.chibi-eyes { display: flex; justify-content: center; gap: 20px; margin-top: 5px; }
-.chibi-eye { width: 18px; height: 22px; background: #333; border-radius: 50%; position: relative; overflow: hidden; }
+.guardian-eyes { display: flex; justify-content: center; gap: 20px; padding-top: 35px; }
+.eye { width: 18px; height: 22px; background: #333; border-radius: 50%; position: relative; overflow: hidden; }
 .pupil { width: 7px; height: 9px; background: white; border-radius: 50%; position: absolute; top: 4px; left: 5px; }
+.guardian-mouth { width: 14px; height: 7px; background: #c26b6b; border-radius: 0 0 8px 8px; margin: 10px auto 0; transition: 0.2s; }
+.guardian-mouth.speaking { width: 18px; height: 4px; border-radius: 10px; animation: talk 0.25s infinite; }
+@keyframes talk { 0%,100%{height:7px} 50%{height:3px} }
+.guardian-blush { width: 12px; height: 8px; background: rgba(255,150,150,0.5); border-radius: 50%; position: absolute; top: 55px; }
+.guardian-blush.left { left: -20px; } .guardian-blush.right { right: -20px; }
 
-/* Boca */
-.chibi-mouth { width: 14px; height: 7px; background: #c26b6b; border-radius: 0 0 8px 8px; margin: 8px auto 0; transition: all 0.2s; }
-.chibi-mouth.speaking { width: 18px; height: 4px; border-radius: 10px; background: #a04a4a; animation: talk 0.25s infinite; }
-@keyframes talk {
-    0%, 100% { height: 7px; }
-    50% { height: 3px; }
-}
+/* BUNNY */
+.bunny-ears { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; }
+.ear { width: 18px; height: 45px; background: #ffb3ba; border-radius: 10px; position: relative; }
+.ear::after { content: ''; width: 10px; height: 20px; background: #ff8a95; border-radius: 5px; position: absolute; bottom: 5px; left: 4px; }
 
-/* Mejillas */
-.chibi-blush { width: 12px; height: 8px; background: rgba(255, 150, 150, 0.5); border-radius: 50%; position: absolute; top: 18px; }
-.chibi-blush.left { left: -25px; }
-.chibi-blush.right { right: -25px; }
+/* HOODIE */
+.hoodie-hood { width: 110px; height: 60px; background: #ff9800; border-radius: 30px 30px 0 0; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); }
+.hoodie-body { width: 80px; height: 50px; background: #ff9800; border-radius: 10px; position: absolute; top: 110px; left: 50%; transform: translateX(-50%); }
 
-/* Bata */
-.chibi-coat { width: 80px; height: 70px; background: white; border-radius: 10px 10px 0 0; position: absolute; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1; }
+/* ASTRO */
+.astro-visor { width: 80px; height: 30px; background: #00e5ff; border-radius: 15px; position: absolute; top: 45px; left: 50%; transform: translateX(-50%); opacity: 0.8; }
 
-/* Estetoscopio */
-.chibi-stethoscope { width: 40px; height: 15px; background: #666; border-radius: 10px; position: absolute; top: 110px; left: 30px; z-index: 3; transform: rotate(-20deg); }
-.chibi-stethoscope::after { content: ''; width: 8px; height: 8px; background: #888; border-radius: 50%; position: absolute; right: -5px; top: 3px; }
+/* PULSE */
+.pulse-headphones { width: 90px; height: 20px; background: #455a64; border-radius: 20px; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); }
+.pulse-headphones::before, .pulse-headphones::after { content: ''; width: 18px; height: 18px; background: #455a64; border-radius: 50%; position: absolute; top: 20px; }
+.pulse-headphones::before { left: 2px; } .pulse-headphones::after { right: 2px; }
 
-/* Tableta */
-.chibi-tablet { width: 30px; height: 40px; background: #333; border-radius: 4px; position: absolute; top: 105px; right: 40px; z-index: 3; }
-.chibi-tablet::after { content: ''; width: 26px; height: 20px; background: #a8dadc; border-radius: 2px; position: absolute; top: 3px; left: 2px; }
+/* REBOTE METRÓNOMO */
+@keyframes compressBounce { 0%{transform:translateY(0) scaleY(1)} 50%{transform:translateY(6px) scaleY(0.92)} 100%{transform:translateY(0) scaleY(1)} }
+.avatar-container.compress .guardian { animation: compressBounce 0.545s infinite; }
 
-/* Rebote al ritmo del metrónomo */
-@keyframes compressBounce {
-    0% { transform: translateY(0) scaleY(1); }
-    50% { transform: translateY(6px) scaleY(0.92); }
-    100% { transform: translateY(0) scaleY(1); }
-}
-.avatar-container.compress .chibi-medic {
-    animation: compressBounce 0.545s infinite;
-}
-
-/* Globo */
-.speech-bubble { background: var(--bubble-bg); border-radius: 20px 20px 20px 6px; padding: 14px 18px; margin-top: 12px; max-width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); animation: pop 0.4s ease; }
-@keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-#bubble-text { color: #fff; font-size: 1.15rem; font-weight: 600; line-height: 1.4; }
-
-/* Selectores */
+/* RESTO DE ESTILOS (BOTONES, GLOBO, SELECTORES) */
+.speech-bubble { background: var(--bubble-bg); border-radius: 20px 20px 20px 6px; padding: 14px 18px; margin-top: 12px; max-width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+#bubble-text { color: #fff; font-size: 1.15rem; font-weight: 600; }
 .type-selector, .gender-selector { display: flex; gap: 10px; justify-content: center; margin: 12px 0; }
-.type-btn, .gender-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 10px 16px; cursor: pointer; transition: all 0.25s; color: #ccc; font-weight: 600; }
-.type-btn.selected, .gender-btn.active { background: rgba(168, 218, 220, 0.2); border-color: var(--celeste); color: white; box-shadow: 0 0 14px rgba(168,218,220,0.3); }
-
-/* Botones */
-.btn { width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.btn:disabled { opacity: 0.4; cursor: default; }
-.btn-start { background: var(--verde); color: #111; box-shadow: 0 6px 16px rgba(6,214,160,0.3); }
-.btn-next { background: var(--amarillo); color: #222; box-shadow: 0 6px 16px rgba(255,209,102,0.3); }
-.btn-voice { background: rgba(255,255,255,0.08); color: #eee; border: 1px solid rgba(255,255,255,0.2); }
+.type-btn, .gender-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 10px 16px; cursor: pointer; color: #ccc; font-weight: 600; }
+.type-btn.selected, .gender-btn.active { background: rgba(168, 218, 220, 0.2); border-color: var(--celeste); color: white; }
+.btn { width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+.btn:disabled { opacity: 0.4; }
+.btn-start { background: var(--verde); color: #111; }
+.btn-next { background: var(--amarillo); color: #222; }
+.btn-voice { background: rgba(255,255,255,0.08); color: #eee; }
 .btn-emergency { background: var(--rojo); color: white; animation: pulse 2s infinite; text-decoration: none; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,107,107,0.5); } 70% { box-shadow: 0 0 0 18px rgba(255,107,107,0); } 100% { box-shadow: 0 0 0 0 rgba(255,107,107,0); } }
+@keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(255,107,107,0.5)} 70%{box-shadow:0 0 0 18px rgba(255,107,107,0)} 100%{box-shadow:0 0 0 0} }
 .metronome-box { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 14px; margin: 12px 0; color: #ccc; border: 1px dashed #ffb347; }
-.metro-btn { background: #ffb347; color: #111; border: none; border-radius: 20px; padding: 12px 16px; font-weight: bold; cursor: pointer; margin: 4px; }
+.metro-btn { background: #ffb347; color: #111; border: none; border-radius: 20px; padding: 12px; font-weight: bold; margin: 4px; }
 .disclaimer { font-size: 0.7rem; color: #666; margin-top: 14px; }
-
-/* Ocultar/mostrar botones */
 #start-btn.guide-active { display: none; }
 #next-btn { display: none; }
 #next-btn.visible { display: flex; }
