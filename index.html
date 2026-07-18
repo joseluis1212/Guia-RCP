@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>RCP Companion ✨</title>
+    <title>Guardianes de la Vida ✨</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a1a2e">
@@ -11,36 +11,66 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Área del avatar -->
         <div class="avatar-area">
             <div id="avatar-container" class="avatar-container">
-                <!-- Avatar CSS del médico chibi -->
-                <div id="chibi-medic" class="chibi-medic">
-                    <div class="chibi-body">
-                        <div class="chibi-head">
-                            <div class="chibi-hair"></div>
-                            <div class="chibi-face">
-                                <div class="chibi-eyes">
-                                    <div class="chibi-eye left"><div class="pupil"></div></div>
-                                    <div class="chibi-eye right"><div class="pupil"></div></div>
-                                </div>
-                                <div class="chibi-mouth"></div>
-                                <div class="chibi-blush left"></div>
-                                <div class="chibi-blush right"></div>
-                            </div>
+                <!-- 🐰 Bunny -->
+                <div id="bunny" class="guardian">
+                    <div class="bunny-ears">
+                        <div class="ear left"></div><div class="ear right"></div>
+                    </div>
+                    <div class="guardian-head" style="background:#ffe0e0;">
+                        <div class="guardian-eyes">
+                            <div class="eye left"><div class="pupil"></div></div>
+                            <div class="eye right"><div class="pupil"></div></div>
                         </div>
-                        <div class="chibi-coat"></div>
-                        <div class="chibi-stethoscope"></div>
-                        <div class="chibi-tablet"></div>
+                        <div class="guardian-mouth"></div>
+                        <div class="guardian-blush left"></div><div class="guardian-blush right"></div>
+                    </div>
+                </div>
+
+                <!-- 🩶 Hoodie -->
+                <div id="hoodie" class="guardian" style="display:none;">
+                    <div class="hoodie-hood"></div>
+                    <div class="guardian-head" style="background:#ffcc80;">
+                        <div class="guardian-eyes">
+                            <div class="eye left"><div class="pupil"></div></div>
+                            <div class="eye right"><div class="pupil"></div></div>
+                        </div>
+                        <div class="guardian-mouth"></div>
+                    </div>
+                    <div class="hoodie-body"></div>
+                </div>
+
+                <!-- 🚀 Astro -->
+                <div id="astro" class="guardian" style="display:none;">
+                    <div class="astro-visor"></div>
+                    <div class="guardian-head" style="background:#37474f;">
+                        <div class="guardian-eyes" style="background:#00e5ff;">
+                            <div class="eye left"><div class="pupil"></div></div>
+                            <div class="eye right"><div class="pupil"></div></div>
+                        </div>
+                        <div class="guardian-mouth" style="background:#00e5ff;"></div>
+                    </div>
+                </div>
+
+                <!-- 🎧 Pulse -->
+                <div id="pulse" class="guardian" style="display:none;">
+                    <div class="pulse-headphones"></div>
+                    <div class="guardian-head" style="background:#cfd8dc;">
+                        <div class="guardian-eyes">
+                            <div class="eye left"><div class="pupil"></div></div>
+                            <div class="eye right"><div class="pupil"></div></div>
+                        </div>
+                        <div class="guardian-mouth" style="background:#0288d1;"></div>
                     </div>
                 </div>
             </div>
+
             <div id="speech-bubble" class="speech-bubble">
                 <p id="bubble-text"></p>
             </div>
         </div>
 
-        <!-- Selectores -->
         <div class="type-selector">
             <button class="type-btn selected" data-type="adulto">🧑 Adulto</button>
             <button class="type-btn" data-type="niño">🧒 Niño</button>
@@ -51,14 +81,12 @@
             <button class="gender-btn" data-gender="femenino">♀️</button>
         </div>
 
-        <!-- Controles -->
         <div class="controls">
             <button id="start-btn" class="btn btn-start">▶ Iniciar Guía</button>
             <button id="next-btn" class="btn btn-next" disabled style="display:none;">⏭ Siguiente</button>
             <button id="voice-btn" class="btn btn-voice">🔊 Voz: Activada</button>
         </div>
 
-        <!-- Metrónomo -->
         <div id="metronome-box" class="metronome-box" style="display: none;">
             <p>🎵 Ritmo 100‑120/min</p>
             <button id="metro-start" class="metro-btn">▶ Iniciar</button>
@@ -66,9 +94,9 @@
         </div>
 
         <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
-        <p class="disclaimer">Asistente virtual · No sustituye formación profesional</p>
+        <p class="disclaimer">Guardianes de la Vida · Asistente virtual de emergencias</p>
     </div>
 
     <script src="app.js"></script>
 </body>
-</html>
+    </html>
