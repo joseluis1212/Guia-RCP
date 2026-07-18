@@ -66,7 +66,7 @@ body {
 @keyframes compressBounce { 0%{transform:translateY(0) scaleY(1)} 50%{transform:translateY(6px) scaleY(0.92)} 100%{transform:translateY(0) scaleY(1)} }
 .avatar-container.compress .guardian { animation: compressBounce 0.545s infinite; }
 
-/* RESTO DE ESTILOS (BOTONES, GLOBO, SELECTORES) */
+/* RESTO DE ESTILOS */
 .speech-bubble { background: var(--bubble-bg); border-radius: 20px 20px 20px 6px; padding: 14px 18px; margin-top: 12px; max-width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 #bubble-text { color: #fff; font-size: 1.15rem; font-weight: 600; }
 .type-selector, .gender-selector { display: flex; gap: 10px; justify-content: center; margin: 12px 0; }
