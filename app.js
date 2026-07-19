@@ -1,269 +1,196 @@
 // ========================
-//  GUARDIANES DE LA VIDA ✨ (v10 final)
+//  GUARDIANES DE LA VIDA — vFinal
 // ========================
 
-const stepsAdulto = [
-  { title: "Paso 1: Seguridad", text: "Verificá que la escena sea segura.", metronome: false },
-  { title: "Paso 2: Evaluación", text: "Evaluá respuesta hablándole y moviéndole suavemente los hombros.", metronome: false },
-  { title: "Paso 3: Llamar a emergencias", text: "Llamá al 107, 911 o al sistema local de emergencias.", metronome: false },
-  { title: "Paso 4: Posición de manos", text: "Colocá el talón de una mano en el centro inferior del esternón y la otra mano encima.", metronome: true },
-  { title: "Paso 5: Profundidad y ritmo", text: "Comprimí el tórax entre 5 y 6 cm, a 100 a 120 por minuto.", metronome: true },
-  { title: "Paso 6: Compresiones (30)", text: "Hacé 30 compresiones ininterrumpidas, liberando por completo el tórax entre una y otra.", metronome: true },
-  { title: "Paso 7: Continuar ciclos", text: "Continuá ciclos de RCP hasta que llegue ayuda o la víctima recupere conciencia.", metronome: true },
-  { title: "Paso 8: Ventilaciones", text: "Realizá 2 insuflaciones (sellando la nariz) solo si tenés entrenamiento y una máscara de protección. Si no, continuá con las compresiones.", metronome: false },
-  { title: "Paso 9: Uso del DEA", text: "Si hay DEA, encendelo y seguí sus instrucciones.", metronome: false },
-  { title: "Paso 10: Posición de recuperación", text: "Si la persona recupera el pulso o la conciencia, colocala de costado en posición de recuperación.", metronome: false }
+const GUARDIANS = [
+  { id:'hoodie', name:'Hoodie', role:'Calma bajo presión', accent:'#ff4fa0', greet:'Estás en una emergencia, pero yo te guío paso a paso.' },
+  { id:'pulse', name:'Pulse', role:'Ritmo y precisión', accent:'#3ddaf0', greet:'Estás en una emergencia, pero yo te guío paso a paso.' },
+  { id:'astro', name:'Astro', role:'Guía sereno', accent:'#ff8a3d', greet:'Estás en una emergencia, pero yo te guío paso a paso.' },
+  { id:'bunny', name:'Bunny', role:'Voz suave y clara', accent:'#ffb347', greet:'Estás en una emergencia, pero yo te guío paso a paso.' }
 ];
 
-const stepsNiño = [
-  { title: "Paso 1: Seguridad", text: "Confirmá seguridad de la escena.", metronome: false },
-  { title: "Paso 2: Evaluación", text: "Revisá si responde y si respira normalmente.", metronome: false },
-  { title: "Paso 3: Llamar a emergencias", text: "Llamá a emergencias y pedí un DEA si está disponible.", metronome: false },
-  { title: "Paso 4: RCP inicial", text: "Si estás solo, hacé 2 minutos de RCP antes de alejarte a llamar, según la guía oficial.", metronome: true },
-  { title: "Paso 5: Compresiones (30)", text: "Realizá 30 compresiones en el centro del pecho, a 100 a 120 por minuto.", metronome: true },
-  { title: "Paso 6: Profundidad", text: "La compresión debe hundir el tórax aproximadamente 5 cm.", metronome: true },
-  { title: "Paso 7: Ventilaciones (si sabés)", text: "Si sabés hacerlo, agregá 2 ventilaciones boca a boca después de las compresiones.", metronome: false },
-  { title: "Paso 8: Técnica de ventilación", text: "Para la ventilación, tapá ambas fosas nasales y soplá una bocanada breve de alrededor de 1 segundo.", metronome: false },
-  { title: "Paso 9: Manos según tamaño", text: "En niños pequeños se usa una mano; en niños más grandes o de complexión grande, dos manos.", metronome: false },
-  { title: "Paso 10: Continuar", text: "Repetí ciclos de 30 compresiones (y 2 ventilaciones si las estás haciendo) hasta que llegue ayuda.", metronome: true }
+const STEPS = [
+  { title:'Verificar la escena', adulto:'Confirmá que el lugar es seguro antes de acercarte.', nino:'Confirmá que el lugar es seguro antes de acercarte.', bebe:'Confirmá que el lugar es seguro antes de acercarte.' },
+  { title:'Verificar respuesta', adulto:'Tocá los hombros y preguntá en voz alta si está bien.', nino:'Llamalo por su nombre y estimulalo suavemente.', bebe:'Dale palmaditas en la planta del pie para estimular respuesta.' },
+  { title:'Pedir ayuda', adulto:'Llamá al 107 o pedí a alguien que lo haga. Si hay un DEA cerca, pedí que lo traigan.', nino:'Llamá al 107 o pedí a alguien que lo haga de inmediato.', bebe:'Llamá al 107 o pedí a alguien que lo haga de inmediato.' },
+  { title:'Verificar la respiración', adulto:'Acercate y observá si el pecho sube y baja durante unos segundos.', nino:'Acercate y observá si el pecho sube y baja durante unos segundos.', bebe:'Acercate y observá si el pecho sube y baja durante unos segundos.' },
+  { title:'Posicionar las manos', adulto:'Colocá el talón de una mano en el centro del pecho y la otra encima, dedos entrelazados.', nino:'Usá el talón de una mano (o ambas si hace falta) en el centro del pecho.', bebe:'Usá dos dedos en el centro del pecho, justo debajo de la línea de los pezones.' },
+  { title:'Postura de compresión', adulto:'Brazos rectos, hombros directamente sobre las manos, rodillas firmes.', nino:'Brazos rectos, hombros sobre las manos, postura estable.', bebe:'Postura relajada, dedos firmes y controlados sobre el pecho.' },
+  { title:'Compresión activa', adulto:'Empujá fuerte y rápido, al menos 5 cm de profundidad, a 100–120 por minuto.', nino:'Comprimí unos 5 cm de profundidad, a 100–120 por minuto.', bebe:'Comprimí unos 4 cm de profundidad, a 100–120 por minuto, con movimientos suaves.' },
+  { title:'Retroceso completo', adulto:'Dejá que el pecho suba por completo entre una compresión y otra.', nino:'Permití que el pecho se expanda entre cada compresión.', bebe:'Permití que el pecho se expanda entre cada compresión.' },
+  { title:'Ventilación de rescate', adulto:'Si estás entrenado: inclina la cabeza hacia atrás y da dos respiraciones de rescate cada 30 compresiones.', nino:'Inclina la cabeza con cuidado hacia atrás y da respiraciones suaves.', bebe:'Inclina la cabeza con mucho cuidado y da respiraciones muy suaves.' },
+  { title:'Continuar / DEA', adulto:'Seguí sin parar hasta que llegue ayuda profesional o la persona reaccione. Usá el DEA si está disponible.', nino:'Seguí sin parar hasta que llegue ayuda profesional o el niño reaccione.', bebe:'Seguí sin parar hasta que llegue ayuda profesional o el bebé reaccione.' }
 ];
 
-const stepsBebe = [
-  { title: "Paso 1: Seguridad", text: "Verificá que el lugar sea seguro.", metronome: false },
-  { title: "Paso 2: Evaluación", text: "Evaluá si el bebé responde y si mueve o no el pecho al respirar.", metronome: false },
-  { title: "Paso 3: Llamar a emergencias", text: "Llamá a emergencias y pedí un DEA.", metronome: false },
-  { title: "Paso 4: RCP inicial", text: "Si estás solo, la guía oficial indica hacer 2 minutos de RCP antes de ir a pedir ayuda.", metronome: true },
-  { title: "Paso 5: Posición", text: "Colocá al bebé boca arriba sobre superficie firme.", metronome: false },
-  { title: "Paso 6: Compresiones (30)", text: "Hacé 30 compresiones con dos dedos en el centro del esternón, entre los pezones.", metronome: true },
-  { title: "Paso 7: Profundidad y ritmo", text: "La profundidad aproximada es de 4 cm, con ritmo de 100 a 120 por minuto.", metronome: true },
-  { title: "Paso 8: Ventilaciones suaves", text: "Luego hacé 2 insuflaciones suaves, cubriendo boca y nariz del bebé con tu boca.", metronome: false },
-  { title: "Paso 9: Duración de la insuflación", text: "Cada insuflación debe durar alrededor de 1 segundo y solo lo suficiente para elevar el tórax.", metronome: false },
-  { title: "Paso 10: Continuar", text: "Repetí el ciclo hasta que llegue ayuda o el bebé se recupere.", metronome: true }
-];
-
-// Asignación fija de guardián por tipo de paciente
-const guardianByType = {
-    adulto: 'bunny',
-    niño: 'hoodie',
-    bebe: 'pulse'
+let state = {
+  guardian: null,
+  age: 'adulto',
+  stepIndex: 0,
+  voiceOn: true,
+  running: false,
+  metronomeTimer: null
 };
 
-const guardianVoices = {
-    bunny: { pitch: 1.2, rate: 0.9 },
-    hoodie: { pitch: 1.5, rate: 1.1 },
-    astro: { pitch: 0.9, rate: 0.85 },
-    pulse: { pitch: 1.0, rate: 0.95 }
-};
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
 
-let currentSteps = [], currentStep = 0, rcpType = 'niño', rcpGender = 'masculino';
-let voiceEnabled = true, metronomeInterval = null, audioCtx = null, guideStarted = false;
-
-const avatarContainer = document.getElementById('avatar-container');
-const bubbleText = document.getElementById('bubble-text');
-const startBtn = document.getElementById('start-btn');
-const nextBtn = document.getElementById('next-btn');
-const backBtn = document.getElementById('back-btn');
-const homeBtn = document.getElementById('home-btn');
-const voiceBtn = document.getElementById('voice-btn');
-const metroStart = document.getElementById('metro-start');
-const metroStop = document.getElementById('metro-stop');
-const metronomeBox = document.getElementById('metronome-box');
-const typeBtns = document.querySelectorAll('.type-btn');
-const genderBtns = document.querySelectorAll('.gender-btn');
-const pupils = document.querySelectorAll('.pupil');
-const navBtns = document.getElementById('nav-btns');
-const introScreen = document.getElementById('intro-screen');
-const mainApp = document.getElementById('main-app');
-const introStartBtn = document.getElementById('intro-start-btn');
-
-function switchGuardian(guardian) {
-    document.querySelectorAll('.guardian').forEach(g => g.style.display = 'none');
-    const active = document.getElementById(guardian);
-    if (active) active.style.display = 'block';
+function showScreen(id) {
+  $$('.screen').forEach(s => s.classList.remove('active'));
+  $('#' + id).classList.add('active');
 }
 
-function updateMouth(guardian, state) {
-    const mouth = document.querySelector(`#${guardian} .guardian-mouth`);
-    if (mouth) {
-        mouth.classList.remove('speaking');
-        if (state === 'speaking') mouth.classList.add('speaking');
-    }
+function renderGuardianGrid() {
+  const grid = $('#guardian-grid');
+  grid.innerHTML = '';
+  GUARDIANS.forEach(g => {
+    const card = document.createElement('button');
+    card.className = 'guardian-card';
+    card.dataset.accent = g.id;
+    card.innerHTML = `
+      <img src="${g.id}.png" alt="${g.name}">
+      <div class="g-name">${g.name}</div>
+      <div class="g-role">${g.role}</div>
+    `;
+    card.addEventListener('click', () => selectGuardian(g));
+    grid.appendChild(card);
+  });
 }
 
-function speak(text, pitch, rate) {
-    if (!voiceEnabled) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.pitch = pitch; utterance.rate = rate; utterance.lang = 'es-AR';
-    const voices = window.speechSynthesis.getVoices();
-    const pref = voices.find(v => v.lang.includes('es-AR')) || voices.find(v => v.lang.includes('es-ES'));
-    if (pref) utterance.voice = pref;
+function selectGuardian(g) {
+  state.guardian = g;
+  $('#em-avatar').src = g.id + '.png';
+  $('#em-name').textContent = g.name;
+  $('#em-text').textContent = g.greet;
+  $('#guide-avatar').src = g.id + '.png';
+  const now = new Date();
+  $('#qc-date').textContent = now.toLocaleString('es-AR', { month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+  showScreen('screen-emergency');
+}
 
-    const currentGuardian = guardianByType[rcpType];
-    updateMouth(currentGuardian, 'speaking');
+function renderStepNav() {
+  const nav = $('#step-nav');
+  nav.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'step-chip' + (i === state.stepIndex ? ' active' : '');
+    chip.textContent = i + 1;
+    chip.addEventListener('click', () => { state.stepIndex = i; renderStep(); });
+    nav.appendChild(chip);
+  });
+}
 
-    utterance.onend = () => {
-        updateMouth(currentGuardian, 'idle');
-        if (guideStarted && currentStep < currentSteps.length) {
-            const step = currentSteps[currentStep];
-            if (step && step.metronome) {
-                avatarContainer.classList.add('compress');
-            } else {
-                avatarContainer.classList.remove('compress');
-            }
-        }
-    };
-    utterance.onerror = () => updateMouth(currentGuardian, 'idle');
-    window.speechSynthesis.speak(utterance);
+function renderStep() {
+  const s = STEPS[state.stepIndex];
+  $('#step-tag').textContent = `Paso ${state.stepIndex + 1} de ${STEPS.length}`;
+  $('#step-title').textContent = s.title;
+  $('#step-desc').textContent = s[state.age];
+  renderStepNav();
+  if (state.voiceOn) speak(s.title + '. ' + s[state.age]);
+}
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'es-AR';
+  u.rate = 1;
+  window.speechSynthesis.speak(u);
+}
+
+function nextStep() {
+  state.stepIndex = (state.stepIndex + 1) % STEPS.length;
+  renderStep();
 }
 
 function toggleVoice() {
-    voiceEnabled = !voiceEnabled;
-    voiceBtn.textContent = voiceEnabled ? '🔊 Voz: Activada' : '🔇 Voz: Apagada';
-    if (!voiceEnabled) window.speechSynthesis.cancel();
+  state.voiceOn = !state.voiceOn;
+  const btn = $('#btn-voice');
+  btn.textContent = state.voiceOn ? '🔊 Voz: activada' : '🔇 Voz: desactivada';
+  btn.classList.toggle('on', state.voiceOn);
+  if (!state.voiceOn) window.speechSynthesis.cancel();
 }
 
-function beep(d=80, f=880) {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.value = f; o.type = 'square'; g.gain.value = 0.4;
-    o.start(); o.stop(audioCtx.currentTime + d/1000);
+function startStopGuide() {
+  const btn = $('#btn-startstop');
+  state.running = !state.running;
+  if (state.running) {
+    btn.textContent = '⏹ Detener guía';
+    btn.classList.add('btn-stop');
+    btn.classList.remove('btn-start');
+    $('#btn-next-step').disabled = false;
+    renderStep();
+    startMetronome();
+  } else {
+    btn.textContent = '▶ Iniciar guía';
+    btn.classList.add('btn-start');
+    btn.classList.remove('btn-stop');
+    $('#btn-next-step').disabled = true;
+    stopMetronome();
+    window.speechSynthesis.cancel();
+  }
 }
+
+let audioCtx = null;
+function beep() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.09);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+  } catch(e) {}
+}
+
 function startMetronome() {
-    if (metronomeInterval) return;
-    beep(100, 880);
-    metronomeInterval = setInterval(() => beep(100, 880), 545);
-    avatarContainer.classList.add('compress');
-    metroStart.disabled = true; metroStop.disabled = false;
+  stopMetronome();
+  state.metronomeTimer = setInterval(beep, 60000 / 110);
 }
 function stopMetronome() {
-    if (metronomeInterval) { clearInterval(metronomeInterval); metronomeInterval = null; }
-    avatarContainer.classList.remove('compress');
-    metroStart.disabled = false; metroStop.disabled = true;
+  if (state.metronomeTimer) clearInterval(state.metronomeTimer);
+  state.metronomeTimer = null;
 }
 
-function showStep(index) {
-    if (index >= 0 && index < currentSteps.length) {
-        currentStep = index;
-        const step = currentSteps[currentStep];
-        const guardian = guardianByType[rcpType];
-        switchGuardian(guardian);
-        bubbleText.textContent = step.text;
-        const voice = guardianVoices[guardian];
-        speak(step.text, voice.pitch, voice.rate);
-        if (step.metronome) { startMetronome(); avatarContainer.classList.add('compress'); }
-        else { stopMetronome(); avatarContainer.classList.remove('compress'); }
-        metronomeBox.style.display = step.metronome ? 'block' : 'none';
-        nextBtn.textContent = (currentStep === currentSteps.length - 1) ? '🔄 Repetir' : '⏭ Siguiente';
-        nextBtn.disabled = false;
-        backBtn.disabled = (currentStep === 0);
-    }
-}
-
-function goToHome() {
-    guideStarted = false;
-    currentSteps = [];
-    currentStep = 0;
+function init() {
+  renderGuardianGrid();
+  $$('.age-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.age-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.age = btn.dataset.age;
+      if (state.running) renderStep();
+    });
+  });
+  $('#btn-iniciar-rcp').addEventListener('click', () => {
+    state.stepIndex = 0;
+    showScreen('screen-guide');
+    $('#step-tag').textContent = `Paso 1 de ${STEPS.length}`;
+    $('#step-title').textContent = STEPS[0].title;
+    $('#step-desc').textContent = STEPS[0][state.age];
+    renderStepNav();
+  });
+  $('#btn-switch').addEventListener('click', () => showScreen('screen-select'));
+  $('#btn-back-emergency').addEventListener('click', () => {
+    state.running = false;
     stopMetronome();
-    startBtn.style.display = 'block';
-    navBtns.style.display = 'none';
-    homeBtn.style.display = 'none';
-    const guardian = guardianByType[rcpType];
-    switchGuardian(guardian);
-    const names = { adulto: 'Bunny', niño: 'Hoodie', bebe: 'Pulse' };
-    bubbleText.textContent = `Soy ${names[rcpType]}, tu asistente para ${rcpType === 'adulto' ? 'Adulto' : rcpType === 'niño' ? 'Niño' : 'Bebé'}. Presioná "Iniciar Guía".`;
-    metronomeBox.style.display = 'none';
+    window.speechSynthesis.cancel();
+    $('#btn-startstop').textContent = '▶ Iniciar guía';
+    $('#btn-startstop').classList.add('btn-start');
+    $('#btn-startstop').classList.remove('btn-stop');
+    $('#btn-next-step').disabled = true;
+    showScreen('screen-emergency');
+  });
+  $('#btn-voice').addEventListener('click', toggleVoice);
+  $('#btn-next-step').addEventListener('click', nextStep);
+  $('#btn-startstop').addEventListener('click', startStopGuide);
+  setInterval(() => {
+    $('#hr-value').textContent = (68 + Math.floor(Math.random() * 10)) + ' bpm';
+  }, 2600);
 }
 
-typeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        typeBtns.forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        rcpType = btn.dataset.type;
-        if (!guideStarted) {
-            const guardian = guardianByType[rcpType];
-            switchGuardian(guardian);
-            const names = { adulto: 'Bunny', niño: 'Hoodie', bebe: 'Pulse' };
-            bubbleText.textContent = `Soy ${names[rcpType]}, tu asistente para ${rcpType === 'adulto' ? 'Adulto' : rcpType === 'niño' ? 'Niño' : 'Bebé'}. Presioná "Iniciar Guía".`;
-            if (voiceEnabled) speak(bubbleText.textContent, guardianVoices[guardian].pitch, guardianVoices[guardian].rate);
-        }
-    });
-});
-
-genderBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        genderBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        rcpGender = btn.dataset.gender;
-    });
-});
-
-startBtn.addEventListener('click', () => {
-    guideStarted = true;
-    startBtn.style.display = 'none';
-    navBtns.style.display = 'flex';
-    homeBtn.style.display = 'block';
-    if (rcpType === 'adulto') currentSteps = stepsAdulto;
-    else if (rcpType === 'niño') currentSteps = stepsNiño;
-    else currentSteps = stepsBebe;
-    currentStep = 0;
-    showStep(currentStep);
-});
-
-nextBtn.addEventListener('click', () => {
-    if (currentStep < currentSteps.length - 1) {
-        showStep(currentStep + 1);
-    } else {
-        showStep(0);
-    }
-});
-
-backBtn.addEventListener('click', () => {
-    if (currentStep > 0) {
-        showStep(currentStep - 1);
-    }
-});
-
-homeBtn.addEventListener('click', goToHome);
-
-voiceBtn.addEventListener('click', toggleVoice);
-metroStart.addEventListener('click', startMetronome);
-metroStop.addEventListener('click', stopMetronome);
-
-document.addEventListener('mousemove', e => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 4;
-    const y = (e.clientY / window.innerHeight - 0.5) * 4;
-    pupils.forEach(p => p.style.transform = `translate(${x}px, ${y}px)`);
-});
-document.addEventListener('touchmove', e => {
-    const t = e.touches[0];
-    const x = (t.clientX / window.innerWidth - 0.5) * 4;
-    const y = (t.clientY / window.innerHeight - 0.5) * 4;
-    pupils.forEach(p => p.style.transform = `translate(${x}px, ${y}px)`);
-});
-
-// Inicio de la aplicación
-window.addEventListener('load', () => {
-    // Mostrar intro
-    introScreen.classList.remove('hidden');
-    mainApp.style.display = 'none';
-
-    introStartBtn.addEventListener('click', () => {
-        introScreen.classList.add('hidden');
-        mainApp.style.display = 'block';
-        // Inicializar con Hoodie (niño) como predeterminado
-        rcpType = 'niño';
-        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
-        document.querySelector('.type-btn[data-type="niño"]').classList.add('selected');
-        const guardian = guardianByType[rcpType];
-        switchGuardian(guardian);
-        const msg = `¡Hola! Soy Hoodie, tu entrenador personal. Seleccioná el tipo de RCP y presioná "Iniciar Guía".`;
-        bubbleText.textContent = msg;
-        setTimeout(() => { if (voiceEnabled) speak(msg, guardianVoices.hoodie.pitch, guardianVoices.hoodie.rate); }, 600);
-    });
-});
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-}
+document.addEventListener('DOMContentLoaded', init);
