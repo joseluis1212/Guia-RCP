@@ -1,14 +1,44 @@
-// ========================
-//  GUARDIANES DE LA VIDA — vFinal
-// ========================
-
 const GUARDIANS = [
-  { id:'hoodie', name:'Hoodie', role:'Calma bajo presión', accent:'#ff4fa0', greet:'Estás en una emergencia, pero yo te guío paso a paso.' },
-  { id:'pulse', name:'Pulse', role:'Ritmo y precisión', accent:'#3ddaf0', greet:'Estás en una emergencia, pero yo te guío paso a paso.' },
-  { id:'astro', name:'Astro', role:'Guía sereno', accent:'#ff8a3d', greet:'Estás en una emergencia, pero yo te guío paso a paso.' },
-  { id:'bunny', name:'Bunny', role:'Voz suave y clara', accent:'#ffb347', greet:'Estás en una emergencia, pero yo te guío paso a paso.' }
+  { id:'hoodie', name:'Hoodie', role:'Calma bajo presión', accent:'#ff4fa0', accentGlow:'rgba(255,79,160,0.5)',
+    greet:'Estás en una emergencia, pero yo te guío paso a paso.', hasPoses:true, poseSteps:{1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:1,10:1}, hasIdle:true },
+  { id:'pulse', name:'Pulse', role:'Ritmo y precisión', accent:'#3ddaf0', accentGlow:'rgba(61,218,240,0.5)',
+    greet:'Estás en una emergencia, pero yo te guío paso a paso.', hasPoses:true, poseSteps:{1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:1,10:1}, hasIdle:true },
+  { id:'astro', name:'Astro', role:'Guía sereno', accent:'#ff8a3d', accentGlow:'rgba(255,138,61,0.5)',
+    greet:'Estás en una emergencia, pero yo te guío paso a paso.', hasPoses:true, poseSteps:{1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:1,10:1}, hasIdle:true },
+  { id:'bunny', name:'Bunny', role:'Voz suave y clara', accent:'#ffb347', accentGlow:'rgba(255,179,71,0.5)',
+    greet:'Estás en una emergencia, pero yo te guío paso a paso.', hasPoses:true, poseSteps:{1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:1,10:1}, hasIdle:true }
 ];
 
+// Static fallback avatar (used when a specific pose file doesn't exist yet)
+function staticAvatar(id){ return `assets/guardians/${id}.jpg`; }
+// Pose image for guardians with hasPoses = true. poseKey: 'greet' | 'idle' | 'step1'..'step10'
+function poseAvatar(id, poseKey){ return `assets/guardians/${id}/${poseKey}.webp`; }
+
+// Resolves the best available image for a given guardian + pose, falling back to static avatar
+function resolveAvatar(g, poseKey){
+  if (!g.hasPoses) return staticAvatar(g.id);
+  if (poseKey === 'greet') return poseAvatar(g.id, 'greet');
+  if (poseKey === 'idle') return g.hasIdle ? poseAvatar(g.id, 'idle') : staticAvatar(g.id);
+  const stepNum = parseInt(poseKey.replace('step',''), 10);
+  if (g.poseSteps && g.poseSteps[stepNum]) return poseAvatar(g.id, poseKey);
+  return staticAvatar(g.id);
+}
+
+// Sets an <img> src with automatic fallback to the guardian's static avatar if the
+// pose file is missing or fails to load (e.g. a future pose not yet uploaded to the repo).
+function setAvatarSrc(imgEl, g, poseKey){
+  const url = resolveAvatar(g, poseKey);
+  const fallback = staticAvatar(g.id);
+  imgEl.onerror = () => {
+    if (imgEl.src.indexOf(fallback) === -1){
+      imgEl.onerror = null;
+      imgEl.src = fallback;
+    }
+  };
+  imgEl.src = url;
+}
+
+// 10-step guide, shared pose across ages, text adapts per age where medically relevant
 const STEPS = [
   { title:'Verificar la escena', adulto:'Confirmá que el lugar es seguro antes de acercarte.', nino:'Confirmá que el lugar es seguro antes de acercarte.', bebe:'Confirmá que el lugar es seguro antes de acercarte.' },
   { title:'Verificar respuesta', adulto:'Tocá los hombros y preguntá en voz alta si está bien.', nino:'Llamalo por su nombre y estimulalo suavemente.', bebe:'Dale palmaditas en la planta del pie para estimular respuesta.' },
@@ -34,61 +64,84 @@ let state = {
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
-function showScreen(id) {
+function showScreen(id){
   $$('.screen').forEach(s => s.classList.remove('active'));
   $('#' + id).classList.add('active');
 }
 
-function renderGuardianGrid() {
+function setAccent(g){
+  document.documentElement.style.setProperty('--g-accent', g.accent);
+  document.documentElement.style.setProperty('--g-accent-glow', g.accentGlow);
+}
+
+function renderGuardianGrid(){
   const grid = $('#guardian-grid');
   grid.innerHTML = '';
   GUARDIANS.forEach(g => {
     const card = document.createElement('button');
     card.className = 'guardian-card';
     card.dataset.accent = g.id;
+    card.style.setProperty('--accent', g.accent);
+    const img = resolveAvatar(g, 'greet');
+    const fallback = staticAvatar(g.id);
     card.innerHTML = `
-      <img src="${g.id}.png" alt="${g.name}">
+      <img src="${img}" data-fallback="${fallback}" alt="${g.name}" loading="lazy" onerror="if(this.src.indexOf(this.dataset.fallback)===-1){this.onerror=null;this.src=this.dataset.fallback;}">
       <div class="g-name">${g.name}</div>
       <div class="g-role">${g.role}</div>
     `;
-    card.addEventListener('click', () => selectGuardian(g));
+    card.addEventListener('click', () => selectGuardian(g.id));
     grid.appendChild(card);
   });
 }
 
-function selectGuardian(g) {
+function selectGuardian(id){
+  const g = GUARDIANS.find(x => x.id === id);
   state.guardian = g;
-  $('#em-avatar').src = g.id + '.png';
-  $('#em-name').textContent = g.name;
+  setAccent(g);
+
+  setAvatarSrc($('#em-avatar'), g, 'greet');
+  $('#em-name').textContent = `¡Hola! Soy ${g.name}.`;
   $('#em-text').textContent = g.greet;
-  $('#guide-avatar').src = g.id + '.png';
+
+  setAvatarSrc($('#guide-avatar'), g, 'idle');
+  $('#guide-name').textContent = g.name;
+
   const now = new Date();
-  $('#qc-date').textContent = now.toLocaleString('es-AR', { month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+  const opts = { month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit' };
+  $('#qc-date').textContent = now.toLocaleString('es-AR', opts);
+
   showScreen('screen-emergency');
 }
 
-function renderStepNav() {
+function renderStepNav(){
   const nav = $('#step-nav');
   nav.innerHTML = '';
   STEPS.forEach((s, i) => {
     const chip = document.createElement('button');
     chip.className = 'step-chip' + (i === state.stepIndex ? ' active' : '');
-    chip.textContent = i + 1;
+    chip.textContent = `${i+1}`;
+    chip.title = s.title;
     chip.addEventListener('click', () => { state.stepIndex = i; renderStep(); });
     nav.appendChild(chip);
   });
 }
 
-function renderStep() {
+function renderStep(){
   const s = STEPS[state.stepIndex];
   $('#step-tag').textContent = `Paso ${state.stepIndex + 1} de ${STEPS.length}`;
   $('#step-title').textContent = s.title;
   $('#step-desc').textContent = s[state.age];
   renderStepNav();
+
+  const g = state.guardian;
+  if (g) {
+    setAvatarSrc($('#guide-avatar'), g, `step${state.stepIndex + 1}`);
+  }
+
   if (state.voiceOn) speak(s.title + '. ' + s[state.age]);
 }
 
-function speak(text) {
+function speak(text){
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -97,12 +150,12 @@ function speak(text) {
   window.speechSynthesis.speak(u);
 }
 
-function nextStep() {
+function nextStep(){
   state.stepIndex = (state.stepIndex + 1) % STEPS.length;
   renderStep();
 }
 
-function toggleVoice() {
+function toggleVoice(){
   state.voiceOn = !state.voiceOn;
   const btn = $('#btn-voice');
   btn.textContent = state.voiceOn ? '🔊 Voz: activada' : '🔇 Voz: desactivada';
@@ -110,29 +163,29 @@ function toggleVoice() {
   if (!state.voiceOn) window.speechSynthesis.cancel();
 }
 
-function startStopGuide() {
+function startStopGuide(){
   const btn = $('#btn-startstop');
   state.running = !state.running;
-  if (state.running) {
+  if (state.running){
     btn.textContent = '⏹ Detener guía';
-    btn.classList.add('btn-stop');
-    btn.classList.remove('btn-start');
-    $('#btn-next-step').disabled = false;
+    btn.classList.add('stop');
     renderStep();
     startMetronome();
   } else {
     btn.textContent = '▶ Iniciar guía';
-    btn.classList.add('btn-start');
-    btn.classList.remove('btn-stop');
-    $('#btn-next-step').disabled = true;
+    btn.classList.remove('stop');
     stopMetronome();
     window.speechSynthesis.cancel();
+    const g = state.guardian;
+    if (g) {
+      setAvatarSrc($('#guide-avatar'), g, 'idle');
+    }
   }
 }
 
 let audioCtx = null;
-function beep() {
-  try {
+function beep(){
+  try{
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
@@ -144,31 +197,40 @@ function beep() {
     osc.connect(gain).connect(audioCtx.destination);
     osc.start();
     osc.stop(audioCtx.currentTime + 0.1);
-  } catch(e) {}
+  } catch(e){}
 }
 
-function startMetronome() {
+function startMetronome(){
   stopMetronome();
-  state.metronomeTimer = setInterval(beep, 60000 / 110);
+  const bpm = 110;
+  const interval = 60000 / bpm;
+  state.metronomeTimer = setInterval(beep, interval);
 }
-function stopMetronome() {
+function stopMetronome(){
   if (state.metronomeTimer) clearInterval(state.metronomeTimer);
   state.metronomeTimer = null;
 }
 
-function init() {
-  renderGuardianGrid();
+function initAgeSelect(){
   $$('.age-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       $$('.age-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.age = btn.dataset.age;
-      if (state.running) renderStep();
+      renderStep();
     });
   });
+}
+
+function init(){
+  renderGuardianGrid();
+  initAgeSelect();
+
   $('#btn-iniciar-rcp').addEventListener('click', () => {
     state.stepIndex = 0;
     showScreen('screen-guide');
+    const g = state.guardian;
+    if (g) { setAvatarSrc($('#guide-avatar'), g, 'idle'); }
     $('#step-tag').textContent = `Paso 1 de ${STEPS.length}`;
     $('#step-title').textContent = STEPS[0].title;
     $('#step-desc').textContent = STEPS[0][state.age];
@@ -179,17 +241,18 @@ function init() {
     state.running = false;
     stopMetronome();
     window.speechSynthesis.cancel();
-    $('#btn-startstop').textContent = '▶ Iniciar guía';
-    $('#btn-startstop').classList.add('btn-start');
-    $('#btn-startstop').classList.remove('btn-stop');
-    $('#btn-next-step').disabled = true;
+    const btn = $('#btn-startstop');
+    btn.textContent = '▶ Iniciar guía';
+    btn.classList.remove('stop');
     showScreen('screen-emergency');
   });
   $('#btn-voice').addEventListener('click', toggleVoice);
   $('#btn-next-step').addEventListener('click', nextStep);
   $('#btn-startstop').addEventListener('click', startStopGuide);
+
   setInterval(() => {
-    $('#hr-value').textContent = (68 + Math.floor(Math.random() * 10)) + ' bpm';
+    const base = 68 + Math.floor(Math.random()*10);
+    $('#hr-value').textContent = base + ' bpm';
   }, 2600);
 }
 
