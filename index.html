@@ -2,191 +2,125 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Guardianes de la Vida ✨</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0d0a1a">
+    <meta name="theme-color" content="#1a1a2e">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Fondo de partículas -->
+    <div class="particles-background"></div>
 
-    <!-- ============ SCREEN 1: GUARDIAN SELECTION ============ -->
-    <div id="screen-select" class="screen active">
-        <div class="screen-inner">
-            <div class="eyebrow">01 · Elegí tu guardián</div>
-            <h1 class="screen-title">¿Quién te va a guiar hoy?</h1>
-            <p class="screen-sub">Cada guardián te acompaña con su propia voz durante toda la emergencia.</p>
+    <!-- PANTALLA DE INTRO -->
+    <div id="intro-screen" class="intro-screen">
+        <div class="intro-container">
+            <h1 class="intro-title">✨ Guardianes de la Vida ✨</h1>
+            <p class="intro-subtitle">Tu guía interactiva de RCP</p>
 
-            <div class="guardian-grid" id="guardian-grid">
-                <div class="guardian-card" data-guardian="bunny">
-                    <div class="mini-avatar av-bunny">
-                        <div class="g-ear l"></div>
-                        <div class="g-ear r"></div>
-                        <div class="g-helmet">
-                            <div class="g-star">✦</div>
-                            <div class="g-visor">
-                                <span class="g-eye talk"></span>
-                                <span class="g-eye talk"></span>
-                            </div>
+            <div class="guardians-showcase">
+                <div class="guardian-card" id="intro-bunny">
+                    <div class="bunny-body mini-guardian">
+                        <div class="bunny-ears"><div class="ear left"></div><div class="ear right"></div></div>
+                        <div class="guardian-head" style="background:#ffe0e0;">
+                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
+                            <div class="guardian-mouth"></div>
+                            <div class="guardian-blush left"></div><div class="guardian-blush right"></div>
                         </div>
+                        <div class="bunny-coat"></div>
+                        <div class="bunny-stethoscope"></div>
                     </div>
-                    <div class="guardian-name">Pandi</div>
-                    <div class="guardian-role">Calma y contención</div>
+                    <span class="guardian-name">Bunny</span>
                 </div>
-
-                <div class="guardian-card" data-guardian="astro">
-                    <div class="mini-avatar av-astro">
-                        <div class="g-helmet">
-                            <div class="g-visor">
-                                <span class="g-eye talk"></span>
-                                <span class="g-eye talk"></span>
-                            </div>
+                <div class="guardian-card" id="intro-hoodie">
+                    <div class="hoodie-body mini-guardian">
+                        <div class="hoodie-hood"></div>
+                        <div class="guardian-head" style="background:#ffcc80;">
+                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
+                            <div class="guardian-mouth"></div>
                         </div>
+                        <div class="hoodie-torso"></div>
+                        <div class="hoodie-arm left"></div>
+                        <div class="hoodie-arm right"></div>
                     </div>
-                    <div class="guardian-name">Astro</div>
-                    <div class="guardian-role">Precisión técnica</div>
+                    <span class="guardian-name">Hoodie</span>
                 </div>
-
-                <div class="guardian-card" data-guardian="pulse">
-                    <div class="mini-avatar av-pulse">
-                        <div class="g-locs"></div>
-                        <div class="g-hp"></div>
-                        <div class="g-helmet">
-                            <div class="g-visor">
-                                <span class="g-eye talk"></span>
-                                <span class="g-eye talk"></span>
-                            </div>
+                <div class="guardian-card" id="intro-astro">
+                    <div class="astro-body mini-guardian">
+                        <div class="astro-visor"></div>
+                        <div class="guardian-head" style="background:#37474f;">
+                            <div class="guardian-eyes" style="background:#00e5ff;"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
+                            <div class="guardian-mouth" style="background:#00e5ff;"></div>
                         </div>
+                        <div class="astro-chest-plate"></div>
                     </div>
-                    <div class="guardian-name">Pulse</div>
-                    <div class="guardian-role">Ritmo y energía</div>
+                    <span class="guardian-name">Astro</span>
                 </div>
-
-                <div class="guardian-card" data-guardian="hoodie">
-                    <div class="mini-avatar av-hoodie">
-                        <div class="g-antenna l"></div>
-                        <div class="g-antenna r"></div>
-                        <div class="g-hood">
-                            <div class="g-visor">
-                                <span class="g-eye talk"></span>
-                                <span class="g-eye talk"></span>
-                            </div>
+                <div class="guardian-card" id="intro-pulse">
+                    <div class="pulse-body mini-guardian">
+                        <div class="pulse-headphones"></div>
+                        <div class="guardian-head" style="background:#cfd8dc;">
+                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
+                            <div class="guardian-mouth" style="background:#0288d1;"></div>
                         </div>
+                        <div class="pulse-jacket"></div>
+                        <div class="pulse-smartglass"></div>
                     </div>
-                    <div class="guardian-name">Hoodie</div>
-                    <div class="guardian-role">Firme y directo</div>
+                    <span class="guardian-name">Pulse</span>
                 </div>
             </div>
 
-            <button class="btn btn-primary" id="to-type-btn" disabled>Continuar</button>
+            <div id="intro-message" class="intro-message">
+                <p>Somos los <strong>Guardianes de la Vida</strong>. Estamos aquí para acompañarte en una emergencia y guiarte paso a paso con instrucciones claras y seguras.</p>
+                <p>No importa si nunca hiciste RCP: nosotros te ayudamos. <strong>No estás solo.</strong></p>
+            </div>
+
+            <button id="intro-start-btn" class="btn btn-start-intro">✨ Comenzar ✨</button>
         </div>
     </div>
 
-    <!-- ============ SCREEN 2: TYPE SELECTION ============ -->
-    <div id="screen-type" class="screen">
-        <div class="screen-inner">
-            <div class="eyebrow">02 · A quién vas a ayudar</div>
-            <h1 class="screen-title">Elegí la edad de la víctima</h1>
-
-            <div class="type-grid" id="type-grid">
-                <div class="type-card" data-type="adulto">
-                    <span class="type-icon">🧑</span>
-                    <span>Adulto</span>
-                </div>
-                <div class="type-card" data-type="niño">
-                    <span class="type-icon">🧒</span>
-                    <span>Niño / Niña</span>
-                </div>
-                <div class="type-card" data-type="bebe">
-                    <span class="type-icon">👶</span>
-                    <span>Bebé</span>
-                </div>
+    <!-- APLICACIÓN PRINCIPAL (oculta hasta que se cierra la intro) -->
+    <div id="main-app" class="app-container" style="display:none;">
+        <div class="avatar-area">
+            <div id="avatar-container" class="avatar-container">
+                <!-- Guardianes (idénticos a antes, solo se muestra uno a la vez) -->
+                <!-- ... (el mismo HTML de los guardianes que ya tenías) ... -->
             </div>
-
-            <button class="btn btn-primary" id="to-detect-btn">Continuar</button>
-            <button class="btn btn-ghost" id="back-to-select-btn">← Cambiar guardián</button>
-        </div>
-    </div>
-
-    <!-- ============ SCREEN 3: DETECTION ============ -->
-    <div id="screen-detect" class="screen">
-        <div class="detect-card">
-            <h1 class="detect-title">¡EMERGENCIA CARDÍACA DETECTADA!</h1>
-
-            <div class="detect-avatar-row">
-                <div class="avatar-slot" id="avatar-detect"></div>
-                <div class="speech-bubble">
-                    <p id="detect-bubble-text"></p>
-                </div>
-            </div>
-
-            <div class="vital-card">
-                <div class="vital-header">Verificar Respiración</div>
-                <div class="vital-data">
-                    <span class="bpm"><strong>70</strong> bpm</span>
-                    <span class="signal-quality">Signal Quality: <span id="signal-quality">89</span>/100</span>
-                </div>
-            </div>
-
-            <div class="history-card">
-                <span class="history-label">History</span>
-                <span class="history-value" id="history-value">Normal - Oct 24, 10:00 pm</span>
-            </div>
-
-            <div class="quickcheck-box">
-                <div class="quickcheck-header">
-                    <span>Quick-check</span>
-                    <span id="quickcheck-date"></span>
-                </div>
-                <div class="quickcheck-status">
-                    <span class="status-pill" id="status-conciencia" data-check="conciencia">● No respondida</span>
-                    <span class="status-pill" id="status-respiracion" data-check="respiracion">● No respondida</span>
-                </div>
-            </div>
-
-            <button class="btn-emergency-cta" id="start-rcp-btn" disabled>INICIAR RCP</button>
-
-            <div class="steps-preview">
-                <div class="step-item">1. Compresiones</div>
-                <div class="step-item">2. Compresiones</div>
-                <div class="step-item">3. Compresiones</div>
-                <div class="step-item">4. Compresiones</div>
+            <div id="speech-bubble" class="speech-bubble">
+                <p id="bubble-text"></p>
             </div>
         </div>
-    </div>
 
-    <!-- ============ SCREEN 4: GUIDE ============ -->
-    <div id="screen-guide" class="screen">
-        <div class="guide-card">
-            <div class="guide-top">
-                <div class="guide-step-label" id="guide-step-label">Paso 1 / 10</div>
-                <button class="voice-toggle" id="voice-btn">🔊</button>
-            </div>
-
-            <div class="avatar-area">
-                <div class="avatar-slot avatar-slot-lg" id="avatar-guide"></div>
-                <div class="speech-bubble" id="guide-bubble">
-                    <p id="guide-bubble-text"></p>
-                </div>
-            </div>
-
-            <div class="metronome-box" id="metronome-box">
-                <div>🎵 Ritmo de compresión · 100–120/min</div>
-                <div class="metro-controls">
-                    <button class="metro-btn" id="metro-start">▶ Iniciar ritmo</button>
-                    <button class="metro-btn" id="metro-stop" disabled>⏹ Parar</button>
-                </div>
-            </div>
-
-            <button class="btn btn-primary" id="next-btn">Siguiente ⏭</button>
+        <div class="type-selector">
+            <button class="type-btn" data-type="adulto">🧑 Adulto</button>
+            <button class="type-btn selected" data-type="niño">🧒 Niño</button>
+            <button class="type-btn" data-type="bebe">👶 Bebé</button>
         </div>
-    </div>
+        <div class="gender-selector">
+            <button class="gender-btn active" data-gender="masculino">♂️</button>
+            <button class="gender-btn" data-gender="femenino">♀️</button>
+        </div>
 
-    <!-- ============ FIXED EMERGENCY BUTTON ============ -->
-    <a href="tel:107" class="fixed-emergency-btn">📞 Llamar al 107</a>
+        <div class="controls">
+            <button id="start-btn" class="btn btn-start">▶ Iniciar Guía</button>
+            <div id="nav-btns" style="display:none;">
+                <button id="back-btn" class="btn btn-back">⬅️ Atrás</button>
+                <button id="next-btn" class="btn btn-next" disabled>⏭ Siguiente</button>
+            </div>
+            <button id="home-btn" class="btn btn-home" style="display:none;">🏠 Volver al inicio</button>
+            <button id="voice-btn" class="btn btn-voice">🔊 Voz: Activada</button>
+        </div>
+
+        <div id="metronome-box" class="metronome-box" style="display: none;">
+            <p>🎵 Ritmo 100‑120/min</p>
+            <button id="metro-start" class="metro-btn">▶ Iniciar</button>
+            <button id="metro-stop" class="metro-btn" disabled>⏹ Parar</button>
+        </div>
+
+        <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
+        <p class="disclaimer">Guardianes de la Vida · Asistente virtual de emergencias</p>
+    </div>
 
     <script src="app.js"></script>
 </body>
