@@ -1,12 +1,25 @@
 // ========================
-//  GUARDIANES DE LA VIDA — vFINAL corregido
+//  GUARDIANES DE LA VIDA — app.js completo
 // ========================
 
+// Extensión de las imágenes (webp o png). Cambiá a 'png' si tus imágenes son .png
+const IMG_EXT = 'webp';
+
+// ⚠️ Mapeo de nombres de carpetas EXACTOS en assets/guardians/
+// Si tus carpetas se llaman "Hoodie", "Pulse", "Astro", "Bunny", dejalas como están.
+// Si usaste minúsculas, cambialas a 'hoodie', 'pulse', etc.
+const FOLDER_NAMES = {
+  hoodie: 'Hoodie',
+  pulse: 'Pulse',
+  astro: 'Astro',
+  bunny: 'Bunny'
+};
+
 const GUARDIANS = [
-  { id:'hoodie', name:'Hoodie', role:'Calma bajo presión', accent:'#ff4fa0', greet:'Estoy aquí para guiarte. Mantené la calma.' },
-  { id:'pulse', name:'Pulse', role:'Ritmo y precisión', accent:'#3ddaf0', greet:'Vamos a seguir el ritmo correcto.' },
-  { id:'astro', name:'Astro', role:'Guía sereno', accent:'#ff8a3d', greet:'Respirá hondo, yo me encargo de los pasos.' },
-  { id:'bunny', name:'Bunny', role:'Voz suave y clara', accent:'#ffb347', greet:'Te voy a guiar con mucha claridad.' }
+  { id: 'hoodie', name: 'Hoodie', role: 'Calma bajo presión', accent: '#ff4fa0', greet: 'Estoy aquí para guiarte. Mantené la calma.' },
+  { id: 'pulse',  name: 'Pulse',  role: 'Ritmo y precisión',   accent: '#3ddaf0', greet: 'Vamos a seguir el ritmo correcto.' },
+  { id: 'astro',  name: 'Astro',  role: 'Guía sereno',          accent: '#ff8a3d', greet: 'Respirá hondo, yo me encargo de los pasos.' },
+  { id: 'bunny',  name: 'Bunny',  role: 'Voz suave y clara',    accent: '#ffb347', greet: 'Te voy a guiar con mucha claridad.' }
 ];
 
 const STEPS = [
@@ -23,7 +36,7 @@ const STEPS = [
 ];
 
 let state = {
-  guardian: GUARDIANS[0], // Hoodie por defecto
+  guardian: GUARDIANS[0],
   age: 'adulto',
   stepIndex: 0,
   voiceOn: true,
@@ -33,20 +46,45 @@ let state = {
 
 const $ = (sel) => document.querySelector(sel);
 
+// ---------- Funciones de imágenes ----------
+function getAssetPath(guardianId, pose) {
+  const folder = FOLDER_NAMES[guardianId] || guardianId;
+  return `assets/guardians/${folder}/${pose}.${IMG_EXT}`;
+}
+
+function setAvatar(imgElement, guardianId, pose) {
+  const primary = getAssetPath(guardianId, pose);
+  const fallback = getAssetPath(guardianId, 'idle');
+
+  imgElement.onerror = function() {
+    if (this.src !== fallback) {
+      this.onerror = null;
+      this.src = fallback;
+    }
+  };
+  imgElement.src = primary;
+}
+
+// ---------- Pantallas ----------
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   $('#' + id).classList.add('active');
 }
 
+// ---------- Guardián ----------
 function setGuardian(g) {
   state.guardian = g;
-  $('#em-avatar').src = g.id + '.png';
+  setAvatar($('#em-avatar'), g.id, 'idle');
+  setAvatar($('#guide-avatar'), g.id, 'idle');
   $('#em-name').textContent = g.name;
   $('#em-text').textContent = g.greet;
-  $('#guide-avatar').src = g.id + '.png';
-  // Actualizar fecha en emergencia
+
   const now = new Date();
   $('#qc-date').textContent = now.toLocaleString('es-AR', { month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+
+  document.querySelectorAll('.glow-ring').forEach(ring => {
+    ring.style.background = g.accent;
+  });
 }
 
 function renderGuardianGrid() {
@@ -56,8 +94,9 @@ function renderGuardianGrid() {
     const card = document.createElement('button');
     card.className = 'guardian-card';
     card.dataset.accent = g.id;
+    const imgPath = getAssetPath(g.id, 'idle');
     card.innerHTML = `
-      <img src="${g.id}.png" alt="${g.name}">
+      <img src="${imgPath}" alt="${g.name}" onerror="this.onerror=null;this.src='${g.id}.png';">
       <div class="g-name">${g.name}</div>
       <div class="g-role">${g.role}</div>
     `;
@@ -69,17 +108,25 @@ function renderGuardianGrid() {
   });
 }
 
+// ---------- Guía paso a paso ----------
 function renderStep() {
   const s = STEPS[state.stepIndex];
   $('#step-tag').textContent = `Paso ${state.stepIndex + 1} de ${STEPS.length}`;
   $('#step-title').textContent = s.title;
   $('#step-desc').textContent = s[state.age];
-  // Actualizar barra de progreso
+
+  // Barra de progreso
   const progress = ((state.stepIndex + 1) / STEPS.length) * 100;
   $('#progress-fill').style.width = progress + '%';
+
+  // Imagen del guardián según el paso actual
+  const pose = `step${state.stepIndex + 1}`;
+  setAvatar($('#guide-avatar'), state.guardian.id, pose);
+
   if (state.voiceOn) speak(s.title + '. ' + s[state.age]);
 }
 
+// ---------- Voz ----------
 function speak(text) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
@@ -87,11 +134,6 @@ function speak(text) {
   u.lang = 'es-AR';
   u.rate = 1;
   window.speechSynthesis.speak(u);
-}
-
-function nextStep() {
-  state.stepIndex = (state.stepIndex + 1) % STEPS.length;
-  renderStep();
 }
 
 function toggleVoice() {
@@ -102,28 +144,17 @@ function toggleVoice() {
   if (!state.voiceOn) window.speechSynthesis.cancel();
 }
 
-function startStopGuide() {
-  const btn = $('#btn-startstop');
-  state.running = !state.running;
-  if (state.running) {
-    btn.textContent = '⏹ Detener guía';
-    btn.classList.add('btn-stop');
-    btn.classList.remove('btn-start');
-    $('#btn-next-step').disabled = false;
-    $('#btn-repeat-step').disabled = false;
-    renderStep();
-    startMetronome();
-  } else {
-    btn.textContent = '▶ Iniciar guía';
-    btn.classList.add('btn-start');
-    btn.classList.remove('btn-stop');
-    $('#btn-next-step').disabled = true;
-    $('#btn-repeat-step').disabled = true;
-    stopMetronome();
-    window.speechSynthesis.cancel();
-  }
+// ---------- Navegación ----------
+function nextStep() {
+  state.stepIndex = (state.stepIndex + 1) % STEPS.length;
+  renderStep();
 }
 
+function repeatStep() {
+  renderStep();
+}
+
+// ---------- Metrónomo ----------
 let audioCtx = null;
 function beep() {
   try {
@@ -150,6 +181,30 @@ function stopMetronome() {
   state.metronomeTimer = null;
 }
 
+// ---------- Control de la guía ----------
+function startStopGuide() {
+  const btn = $('#btn-startstop');
+  state.running = !state.running;
+  if (state.running) {
+    btn.textContent = '⏹ Detener guía';
+    btn.classList.add('btn-stop');
+    btn.classList.remove('btn-start');
+    $('#btn-next-step').disabled = false;
+    $('#btn-repeat-step').disabled = false;
+    renderStep();
+    startMetronome();
+  } else {
+    btn.textContent = '▶ Iniciar guía';
+    btn.classList.add('btn-start');
+    btn.classList.remove('btn-stop');
+    $('#btn-next-step').disabled = true;
+    $('#btn-repeat-step').disabled = true;
+    stopMetronome();
+    window.speechSynthesis.cancel();
+    setAvatar($('#guide-avatar'), state.guardian.id, 'idle');
+  }
+}
+
 function exitGuide() {
   state.running = false;
   stopMetronome();
@@ -159,15 +214,16 @@ function exitGuide() {
   $('#btn-startstop').classList.remove('btn-stop');
   $('#btn-next-step').disabled = true;
   $('#btn-repeat-step').disabled = true;
+  setAvatar($('#guide-avatar'), state.guardian.id, 'idle');
   showScreen('screen-emergency');
 }
 
+// ---------- Inicialización ----------
 function init() {
-  // Configurar Hoodie como predeterminado
   setGuardian(GUARDIANS[0]);
   renderGuardianGrid();
 
-  // Simulación de signos vitales educativa
+  // Simulación educativa de frecuencia cardíaca
   setInterval(() => {
     if (document.querySelector('#screen-emergency.active')) {
       $('#hr-value').textContent = (68 + Math.floor(Math.random() * 10)) + ' bpm';
@@ -180,13 +236,12 @@ function init() {
     showScreen('screen-guide');
     renderStep();
   });
-
   $('#btn-switch').addEventListener('click', () => showScreen('screen-select'));
   $('#btn-back-emergency').addEventListener('click', () => showScreen('screen-emergency'));
   $('#btn-exit-guide').addEventListener('click', exitGuide);
   $('#btn-voice').addEventListener('click', toggleVoice);
   $('#btn-next-step').addEventListener('click', nextStep);
-  $('#btn-repeat-step').addEventListener('click', () => renderStep());
+  $('#btn-repeat-step').addEventListener('click', repeatStep);
   $('#btn-startstop').addEventListener('click', startStopGuide);
 
   // Selector de edad
@@ -199,7 +254,7 @@ function init() {
     });
   });
 
-  // Solución para iOS: al primer toque en cualquier botón, desbloquear audio
+  // Desbloquear audio en iOS
   document.body.addEventListener('touchstart', () => {
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   }, { once: true });
