@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rcp-guide-v3';
+const CACHE_NAME = 'rcp-guide-v5';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -6,10 +6,7 @@ const urlsToCache = [
   '/app.js',
   '/manifest.json',
   '/icon-192.png',
-  '/icon-512.png',
-  '/adulto.png',   // ← Avatar adulto
-  '/niño.png',     // ← Avatar niño
-  '/bebe.png'      // ← Avatar bebé
+  '/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
