@@ -3,181 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Guardianes de la Vida ✨</title>
+    <meta name="theme-color" content="#0d0221">
+    <title>RCP Companion — Guardianes de la Vida</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a1a2e">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Fondo de partículas -->
-    <div class="particles-background"></div>
-
-    <!-- PANTALLA DE INTRO -->
-    <div id="intro-screen" class="intro-screen">
-        <div class="intro-container">
-            <h1 class="intro-title">✨ Guardianes de la Vida ✨</h1>
-            <p class="intro-subtitle">Tu guía interactiva de RCP</p>
-
-            <div class="guardians-showcase">
-                <div class="guardian-card" id="intro-bunny">
-                    <div class="bunny-body mini-guardian">
-                        <div class="bunny-ears"><div class="ear left"></div><div class="ear right"></div></div>
-                        <div class="guardian-head" style="background:#ffe0e0;">
-                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
-                            <div class="guardian-mouth"></div>
-                            <div class="guardian-blush left"></div><div class="guardian-blush right"></div>
-                        </div>
-                        <div class="bunny-coat"></div>
-                        <div class="bunny-stethoscope"></div>
-                    </div>
-                    <span class="guardian-name">Bunny</span>
-                </div>
-                <div class="guardian-card" id="intro-hoodie">
-                    <div class="hoodie-body mini-guardian">
-                        <div class="hoodie-hood"></div>
-                        <div class="guardian-head" style="background:#ffcc80;">
-                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
-                            <div class="guardian-mouth"></div>
-                        </div>
-                        <div class="hoodie-torso"></div>
-                        <div class="hoodie-arm left"></div>
-                        <div class="hoodie-arm right"></div>
-                    </div>
-                    <span class="guardian-name">Hoodie</span>
-                </div>
-                <div class="guardian-card" id="intro-astro">
-                    <div class="astro-body mini-guardian">
-                        <div class="astro-visor"></div>
-                        <div class="guardian-head" style="background:#37474f;">
-                            <div class="guardian-eyes" style="background:#00e5ff;"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
-                            <div class="guardian-mouth" style="background:#00e5ff;"></div>
-                        </div>
-                        <div class="astro-chest-plate"></div>
-                    </div>
-                    <span class="guardian-name">Astro</span>
-                </div>
-                <div class="guardian-card" id="intro-pulse">
-                    <div class="pulse-body mini-guardian">
-                        <div class="pulse-headphones"></div>
-                        <div class="guardian-head" style="background:#cfd8dc;">
-                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
-                            <div class="guardian-mouth" style="background:#0288d1;"></div>
-                        </div>
-                        <div class="pulse-jacket"></div>
-                        <div class="pulse-smartglass"></div>
-                    </div>
-                    <span class="guardian-name">Pulse</span>
-                </div>
+    <div class="app">
+        <!-- PANTALLA 1: SELECCIÓN DE GUARDIÁN -->
+        <div id="screen-select" class="screen active">
+            <div class="select-head">
+                <div class="eyebrow">✨ Elegí tu compañero</div>
+                <h1>Guardianes<br>de la Vida</h1>
+                <p>Cada guardián te acompañará con instrucciones claras y seguras. Seleccioná el que más te inspire confianza.</p>
             </div>
-
-            <div id="intro-message" class="intro-message">
-                <p>Somos los <strong>Guardianes de la Vida</strong>. Estamos aquí para acompañarte en una emergencia y guiarte paso a paso con instrucciones claras y seguras.</p>
-                <p>No importa si nunca hiciste RCP: nosotros te ayudamos. <strong>No estás solo.</strong></p>
-            </div>
-
-            <button id="intro-start-btn" class="btn btn-start-intro">✨ Comenzar ✨</button>
+            <div id="guardian-grid" class="guardian-grid"></div>
         </div>
-    </div>
 
-    <!-- APLICACIÓN PRINCIPAL (oculta hasta que se cierra la intro) -->
-    <div id="main-app" class="app-container" style="display:none;">
-        <div class="avatar-area">
-            <div id="avatar-container" class="avatar-container">
-                <!-- 🐰 Bunny -->
-                <div id="bunny" class="guardian">
-                    <div class="bunny-body">
-                        <div class="bunny-ears"><div class="ear left"></div><div class="ear right"></div></div>
-                        <div class="guardian-head" style="background:#ffe0e0;">
-                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
-                            <div class="guardian-mouth"></div>
-                            <div class="guardian-blush left"></div><div class="guardian-blush right"></div>
-                        </div>
-                        <div class="bunny-coat"></div>
-                        <div class="bunny-stethoscope"></div>
-                        <div class="bunny-tail"></div>
-                    </div>
+        <!-- PANTALLA 2: EMERGENCIA (confirmación + quickcheck) -->
+        <div id="screen-emergency" class="screen">
+            <div class="alert-banner">
+                <h1>🚨 Asistente activado</h1>
+            </div>
+            <div class="hero-row">
+                <div class="hero-char">
+                    <img id="em-avatar" src="hoodie.png" alt="Guardián">
+                    <div class="glow-ring"></div>
                 </div>
-
-                <!-- 🩶 Hoodie -->
-                <div id="hoodie" class="guardian">
-                    <div class="hoodie-body">
-                        <div class="hoodie-hood"></div>
-                        <div class="guardian-head" style="background:#ffcc80;">
-                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
-                            <div class="guardian-mouth"></div>
-                        </div>
-                        <div class="hoodie-torso"></div>
-                        <div class="hoodie-arm left"></div>
-                        <div class="hoodie-arm right"></div>
-                        <div class="hoodie-shoe left"></div>
-                        <div class="hoodie-shoe right"></div>
-                    </div>
-                </div>
-
-                <!-- 🚀 Astro -->
-                <div id="astro" class="guardian">
-                    <div class="astro-body">
-                        <div class="astro-visor"></div>
-                        <div class="guardian-head" style="background:#37474f;">
-                            <div class="guardian-eyes" style="background:#00e5ff;"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
-                            <div class="guardian-mouth" style="background:#00e5ff;"></div>
-                        </div>
-                        <div class="astro-chest-plate"></div>
-                        <div class="astro-arm left"></div>
-                        <div class="astro-arm right"></div>
-                    </div>
-                </div>
-
-                <!-- 🎧 Pulse -->
-                <div id="pulse" class="guardian">
-                    <div class="pulse-body">
-                        <div class="pulse-headphones"></div>
-                        <div class="guardian-head" style="background:#cfd8dc;">
-                            <div class="guardian-eyes"><div class="eye left"><div class="pupil"></div><div class="shine"></div></div><div class="eye right"><div class="pupil"></div><div class="shine"></div></div></div>
-                            <div class="guardian-mouth" style="background:#0288d1;"></div>
-                        </div>
-                        <div class="pulse-jacket"></div>
-                        <div class="pulse-smartglass"></div>
-                    </div>
+                <div class="bubble">
+                    <p><strong id="em-name">Hoodie</strong></p>
+                    <p id="em-text">Estás en una emergencia, pero yo te guío paso a paso.</p>
                 </div>
             </div>
+            <div class="action-grid">
+                <div class="tile">
+                    <div class="tile-icon">🫀</div>
+                    <div class="tile-label">Frecuencia cardíaca</div>
+                    <div class="tile-value" id="hr-value">72 bpm</div>
+                    <div class="tile-sub">Simulación educativa</div>
+                </div>
+                <div class="tile">
+                    <div class="tile-icon">📡</div>
+                    <div class="tile-label">Calidad de señal</div>
+                    <div class="tile-value">96/100</div>
+                    <div class="tile-sub">Conexión estable</div>
+                </div>
+            </div>
+            <button id="btn-iniciar-rcp" class="cta-primary">⚡ INICIAR GUÍA DE RCP</button>
+            <div class="quickcheck">
+                <div class="quickcheck-head">
+                    <span class="qc-title">Historial reciente</span>
+                    <span class="qc-date" id="qc-date">—</span>
+                </div>
+                <div class="qc-rows">
+                    <div class="qc-row"><span class="dot"></span> Normal — Sin anomalías</div>
+                </div>
+            </div>
+            <button id="btn-switch" class="switch-guardian">🔄 Cambiar de guardián</button>
+        </div>
 
+        <!-- PANTALLA 3: GUÍA PASO A PASO -->
+        <div id="screen-guide" class="screen">
+            <div class="guide-top">
+                <button id="btn-back-emergency" class="btn-icon">← Volver</button>
+                <div class="age-selector">
+                    <button class="age-btn active" data-age="adulto">🧑 Adulto</button>
+                    <button class="age-btn" data-age="nino">🧒 Niño</button>
+                    <button class="age-btn" data-age="bebe">👶 Bebé</button>
+                </div>
+            </div>
+            <div class="guide-avatar-area">
+                <img id="guide-avatar" src="hoodie.png" alt="Guardián" class="guide-avatar-img">
+                <div class="glow-ring guide-glow"></div>
+            </div>
             <div id="speech-bubble" class="speech-bubble">
-                <p id="bubble-text"></p>
+                <p id="step-tag">Paso 1 de 10</p>
+                <h2 id="step-title">Verificar la escena</h2>
+                <p id="step-desc">Confirmá que el lugar es seguro antes de acercarte.</p>
             </div>
-        </div>
-
-        <div class="type-selector">
-            <button class="type-btn" data-type="adulto">🧑 Adulto</button>
-            <button class="type-btn selected" data-type="niño">🧒 Niño</button>
-            <button class="type-btn" data-type="bebe">👶 Bebé</button>
-        </div>
-        <div class="gender-selector">
-            <button class="gender-btn active" data-gender="masculino">♂️</button>
-            <button class="gender-btn" data-gender="femenino">♀️</button>
-        </div>
-
-        <div class="controls">
-            <button id="start-btn" class="btn btn-start">▶ Iniciar Guía</button>
-            <div id="nav-btns" style="display:none;">
-                <button id="back-btn" class="btn btn-back">⬅️ Atrás</button>
-                <button id="next-btn" class="btn btn-next" disabled>⏭ Siguiente</button>
+            <div id="step-nav" class="step-nav"></div>
+            <div class="guide-controls">
+                <button id="btn-startstop" class="btn btn-start">▶ Iniciar guía</button>
+                <button id="btn-voice" class="btn btn-voice on">🔊 Voz: activada</button>
+                <button id="btn-next-step" class="btn btn-next" disabled>⏭ Siguiente paso</button>
             </div>
-            <button id="home-btn" class="btn btn-home" style="display:none;">🏠 Volver al inicio</button>
-            <button id="voice-btn" class="btn btn-voice">🔊 Voz: Activada</button>
+            <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
+            <p class="disclaimer">Guardianes de la Vida · No sustituye formación profesional</p>
         </div>
-
-        <div id="metronome-box" class="metronome-box" style="display: none;">
-            <p>🎵 Ritmo 100‑120/min</p>
-            <button id="metro-start" class="metro-btn">▶ Iniciar</button>
-            <button id="metro-stop" class="metro-btn" disabled>⏹ Parar</button>
-        </div>
-
-        <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
-        <p class="disclaimer">Guardianes de la Vida · Asistente virtual de emergencias</p>
     </div>
 
     <script src="app.js"></script>
 </body>
-                            </html>
+</html>
