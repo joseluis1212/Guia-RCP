@@ -10,7 +10,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app">
+    <!-- PANTALLA DE INTRO (HEADSPACE STYLE) -->
+    <div id="intro-screen" class="intro-screen">
+        <div class="intro-content">
+            <div class="intro-characters">
+                <img src="assets/guardians/Bunny/idle.webp" alt="Bunny" class="intro-char" style="animation-delay:0.2s">
+                <img src="assets/guardians/Hoodie/idle.webp" alt="Hoodie" class="intro-char" style="animation-delay:0.5s">
+                <img src="assets/guardians/Pulse/idle.webp" alt="Pulse" class="intro-char" style="animation-delay:0.8s">
+                <img src="assets/guardians/Astro/idle.webp" alt="Astro" class="intro-char" style="animation-delay:1.1s">
+            </div>
+            <h1 class="intro-title">Guardianes de la Vida</h1>
+            <p class="intro-subtitle">Hola, estamos aquí para acompañarte.<br>Somos tu guía interactiva de RCP.</p>
+            <button id="intro-start-btn" class="intro-btn">Comenzar</button>
+        </div>
+    </div>
+
+    <!-- APLICACIÓN PRINCIPAL (oculta hasta después de la intro) -->
+    <div id="main-app" class="app" style="display:none;">
         <!-- PANTALLA 1: EMERGENCIA (inicio rápido) -->
         <div id="screen-emergency" class="screen active">
             <div class="alert-banner">
@@ -19,7 +35,7 @@
             </div>
             <div class="hero-row">
                 <div class="hero-char">
-                    <img id="em-avatar" src="hoodie.png" alt="Hoodie">
+                    <img id="em-avatar" src="assets/guardians/Hoodie/idle.webp" alt="Hoodie">
                     <div class="glow-ring"></div>
                 </div>
                 <div class="bubble">
@@ -27,34 +43,11 @@
                     <p id="em-text">Estoy aquí para guiarte. Mantené la calma.</p>
                 </div>
             </div>
-            <div class="action-grid">
-                <div class="tile">
-                    <div class="tile-icon">🫀</div>
-                    <div class="tile-label">Frecuencia cardíaca</div>
-                    <div class="tile-value" id="hr-value">— bpm</div>
-                    <div class="tile-sub">(Simulación educativa)</div>
-                </div>
-                <div class="tile">
-                    <div class="tile-icon">📡</div>
-                    <div class="tile-label">Calidad de señal</div>
-                    <div class="tile-value">—</div>
-                    <div class="tile-sub">(Simulación)</div>
-                </div>
-            </div>
             <button id="btn-iniciar-rcp" class="cta-primary">⚡ INICIAR GUÍA DE RCP</button>
-            <div class="quickcheck">
-                <div class="quickcheck-head">
-                    <span class="qc-title">Historial</span>
-                    <span class="qc-date" id="qc-date">—</span>
-                </div>
-                <div class="qc-rows">
-                    <div class="qc-row"><span class="dot"></span> Sin eventos previos</div>
-                </div>
-            </div>
             <button id="btn-switch" class="switch-guardian">🔄 Cambiar de asistente</button>
         </div>
 
-        <!-- PANTALLA 2: SELECCIÓN DE GUARDIÁN (accesible desde emergencia) -->
+        <!-- PANTALLA 2: SELECCIÓN DE GUARDIÁN -->
         <div id="screen-select" class="screen">
             <div class="select-head">
                 <div class="eyebrow">✨ Elegí tu compañero</div>
@@ -76,7 +69,7 @@
                 </div>
             </div>
             <div class="guide-avatar-area">
-                <img id="guide-avatar" src="hoodie.png" alt="Guardián" class="guide-avatar-img">
+                <img id="guide-avatar" src="assets/guardians/Hoodie/idle.webp" alt="Guardián" class="guide-avatar-img">
                 <div class="glow-ring guide-glow"></div>
             </div>
             <div id="speech-bubble" class="speech-bubble">
