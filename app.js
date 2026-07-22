@@ -1,13 +1,10 @@
 // ========================
-//  GUARDIANES DE LA VIDA — app.js completo
+//  GUARDIANES DE LA VIDA — vFinal funcional
 // ========================
 
-// Extensión de las imágenes (webp o png). Cambiá a 'png' si tus imágenes son .png
 const IMG_EXT = 'webp';
 
-// ⚠️ Mapeo de nombres de carpetas EXACTOS en assets/guardians/
-// Si tus carpetas se llaman "Hoodie", "Pulse", "Astro", "Bunny", dejalas como están.
-// Si usaste minúsculas, cambialas a 'hoodie', 'pulse', etc.
+// Mapeo de nombres de carpetas en assets/guardians/
 const FOLDER_NAMES = {
   hoodie: 'Hoodie',
   pulse: 'Pulse',
@@ -46,7 +43,6 @@ let state = {
 
 const $ = (sel) => document.querySelector(sel);
 
-// ---------- Funciones de imágenes ----------
 function getAssetPath(guardianId, pose) {
   const folder = FOLDER_NAMES[guardianId] || guardianId;
   return `assets/guardians/${folder}/${pose}.${IMG_EXT}`;
@@ -55,7 +51,6 @@ function getAssetPath(guardianId, pose) {
 function setAvatar(imgElement, guardianId, pose) {
   const primary = getAssetPath(guardianId, pose);
   const fallback = getAssetPath(guardianId, 'idle');
-
   imgElement.onerror = function() {
     if (this.src !== fallback) {
       this.onerror = null;
@@ -65,26 +60,21 @@ function setAvatar(imgElement, guardianId, pose) {
   imgElement.src = primary;
 }
 
-// ---------- Pantallas ----------
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   $('#' + id).classList.add('active');
 }
 
-// ---------- Guardián ----------
-function setGuardian(g) {
+function setGuardian(g, speakGreeting = false) {
   state.guardian = g;
   setAvatar($('#em-avatar'), g.id, 'idle');
   setAvatar($('#guide-avatar'), g.id, 'idle');
   $('#em-name').textContent = g.name;
   $('#em-text').textContent = g.greet;
-
-  const now = new Date();
-  $('#qc-date').textContent = now.toLocaleString('es-AR', { month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit' });
-
   document.querySelectorAll('.glow-ring').forEach(ring => {
     ring.style.background = g.accent;
   });
+  if (speakGreeting && state.voiceOn) speak(g.greet);
 }
 
 function renderGuardianGrid() {
@@ -101,32 +91,25 @@ function renderGuardianGrid() {
       <div class="g-role">${g.role}</div>
     `;
     card.addEventListener('click', () => {
-      setGuardian(g);
+      setGuardian(g, true);
       showScreen('screen-emergency');
     });
     grid.appendChild(card);
   });
 }
 
-// ---------- Guía paso a paso ----------
 function renderStep() {
   const s = STEPS[state.stepIndex];
   $('#step-tag').textContent = `Paso ${state.stepIndex + 1} de ${STEPS.length}`;
   $('#step-title').textContent = s.title;
   $('#step-desc').textContent = s[state.age];
-
-  // Barra de progreso
   const progress = ((state.stepIndex + 1) / STEPS.length) * 100;
   $('#progress-fill').style.width = progress + '%';
-
-  // Imagen del guardián según el paso actual
   const pose = `step${state.stepIndex + 1}`;
   setAvatar($('#guide-avatar'), state.guardian.id, pose);
-
   if (state.voiceOn) speak(s.title + '. ' + s[state.age]);
 }
 
-// ---------- Voz ----------
 function speak(text) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
@@ -144,93 +127,67 @@ function toggleVoice() {
   if (!state.voiceOn) window.speechSynthesis.cancel();
 }
 
-// ---------- Navegación ----------
-function nextStep() {
-  state.stepIndex = (state.stepIndex + 1) % STEPS.length;
-  renderStep();
-}
+function nextStep() { state.stepIndex = (state.stepIndex + 1) % STEPS.length; renderStep(); }
+function repeatStep() { renderStep(); }
 
-function repeatStep() {
-  renderStep();
-}
-
-// ---------- Metrónomo ----------
 let audioCtx = null;
 function beep() {
   try {
     audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.value = 880;
+    osc.type = 'sine'; osc.frequency.value = 880;
     gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.15, audioCtx.currentTime + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.09);
     osc.connect(gain).connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.1);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
   } catch(e) {}
 }
+function startMetronome() { stopMetronome(); state.metronomeTimer = setInterval(beep, 60000 / 110); }
+function stopMetronome() { if (state.metronomeTimer) clearInterval(state.metronomeTimer); state.metronomeTimer = null; }
 
-function startMetronome() {
-  stopMetronome();
-  state.metronomeTimer = setInterval(beep, 60000 / 110);
-}
-function stopMetronome() {
-  if (state.metronomeTimer) clearInterval(state.metronomeTimer);
-  state.metronomeTimer = null;
-}
-
-// ---------- Control de la guía ----------
 function startStopGuide() {
   const btn = $('#btn-startstop');
   state.running = !state.running;
   if (state.running) {
     btn.textContent = '⏹ Detener guía';
-    btn.classList.add('btn-stop');
-    btn.classList.remove('btn-start');
+    btn.classList.add('btn-stop'); btn.classList.remove('btn-start');
     $('#btn-next-step').disabled = false;
     $('#btn-repeat-step').disabled = false;
-    renderStep();
-    startMetronome();
+    renderStep(); startMetronome();
   } else {
     btn.textContent = '▶ Iniciar guía';
-    btn.classList.add('btn-start');
-    btn.classList.remove('btn-stop');
+    btn.classList.add('btn-start'); btn.classList.remove('btn-stop');
     $('#btn-next-step').disabled = true;
     $('#btn-repeat-step').disabled = true;
-    stopMetronome();
-    window.speechSynthesis.cancel();
+    stopMetronome(); window.speechSynthesis.cancel();
     setAvatar($('#guide-avatar'), state.guardian.id, 'idle');
   }
 }
 
 function exitGuide() {
   state.running = false;
-  stopMetronome();
-  window.speechSynthesis.cancel();
+  stopMetronome(); window.speechSynthesis.cancel();
   $('#btn-startstop').textContent = '▶ Iniciar guía';
-  $('#btn-startstop').classList.add('btn-start');
-  $('#btn-startstop').classList.remove('btn-stop');
+  $('#btn-startstop').classList.add('btn-start'); $('#btn-startstop').classList.remove('btn-stop');
   $('#btn-next-step').disabled = true;
   $('#btn-repeat-step').disabled = true;
   setAvatar($('#guide-avatar'), state.guardian.id, 'idle');
   showScreen('screen-emergency');
 }
 
-// ---------- Inicialización ----------
+// ── INICIO ──
 function init() {
-  setGuardian(GUARDIANS[0]);
+  setGuardian(GUARDIANS[0], false);
   renderGuardianGrid();
 
-  // Simulación educativa de frecuencia cardíaca
-  setInterval(() => {
-    if (document.querySelector('#screen-emergency.active')) {
-      $('#hr-value').textContent = (68 + Math.floor(Math.random() * 10)) + ' bpm';
-    }
-  }, 3000);
+  // Botón de la intro
+  $('#intro-start-btn').addEventListener('click', () => {
+    document.getElementById('intro-screen').classList.add('hidden');
+    document.getElementById('main-app').style.display = 'block';
+  });
 
-  // Eventos de botones
   $('#btn-iniciar-rcp').addEventListener('click', () => {
     state.stepIndex = 0;
     showScreen('screen-guide');
@@ -244,7 +201,6 @@ function init() {
   $('#btn-repeat-step').addEventListener('click', repeatStep);
   $('#btn-startstop').addEventListener('click', startStopGuide);
 
-  // Selector de edad
   document.querySelectorAll('.age-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
