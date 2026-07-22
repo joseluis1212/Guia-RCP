@@ -1,10 +1,9 @@
 // ========================
-//  GUARDIANES DE LA VIDA — vFinal funcional
+//  GUARDIANES DE LA VIDA — vSegura (con fallback robusto)
 // ========================
 
 const IMG_EXT = 'webp';
 
-// Mapeo de nombres de carpetas en assets/guardians/
 const FOLDER_NAMES = {
   hoodie: 'Hoodie',
   pulse: 'Pulse',
@@ -49,6 +48,7 @@ function getAssetPath(guardianId, pose) {
 }
 
 function setAvatar(imgElement, guardianId, pose) {
+  if (!imgElement) return;
   const primary = getAssetPath(guardianId, pose);
   const fallback = getAssetPath(guardianId, 'idle');
   imgElement.onerror = function() {
@@ -62,15 +62,18 @@ function setAvatar(imgElement, guardianId, pose) {
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  $('#' + id).classList.add('active');
+  const screen = document.getElementById(id);
+  if (screen) screen.classList.add('active');
 }
 
 function setGuardian(g, speakGreeting = false) {
   state.guardian = g;
   setAvatar($('#em-avatar'), g.id, 'idle');
   setAvatar($('#guide-avatar'), g.id, 'idle');
-  $('#em-name').textContent = g.name;
-  $('#em-text').textContent = g.greet;
+  const emName = $('#em-name');
+  const emText = $('#em-text');
+  if (emName) emName.textContent = g.name;
+  if (emText) emText.textContent = g.greet;
   document.querySelectorAll('.glow-ring').forEach(ring => {
     ring.style.background = g.accent;
   });
@@ -79,6 +82,7 @@ function setGuardian(g, speakGreeting = false) {
 
 function renderGuardianGrid() {
   const grid = $('#guardian-grid');
+  if (!grid) return;
   grid.innerHTML = '';
   GUARDIANS.forEach(g => {
     const card = document.createElement('button');
@@ -99,12 +103,17 @@ function renderGuardianGrid() {
 }
 
 function renderStep() {
+  if (!state.running) return;
   const s = STEPS[state.stepIndex];
-  $('#step-tag').textContent = `Paso ${state.stepIndex + 1} de ${STEPS.length}`;
-  $('#step-title').textContent = s.title;
-  $('#step-desc').textContent = s[state.age];
+  const stepTag = $('#step-tag');
+  const stepTitle = $('#step-title');
+  const stepDesc = $('#step-desc');
+  if (stepTag) stepTag.textContent = `Paso ${state.stepIndex + 1} de ${STEPS.length}`;
+  if (stepTitle) stepTitle.textContent = s.title;
+  if (stepDesc) stepDesc.textContent = s[state.age];
   const progress = ((state.stepIndex + 1) / STEPS.length) * 100;
-  $('#progress-fill').style.width = progress + '%';
+  const progressFill = $('#progress-fill');
+  if (progressFill) progressFill.style.width = progress + '%';
   const pose = `step${state.stepIndex + 1}`;
   setAvatar($('#guide-avatar'), state.guardian.id, pose);
   if (state.voiceOn) speak(s.title + '. ' + s[state.age]);
@@ -122,6 +131,7 @@ function speak(text) {
 function toggleVoice() {
   state.voiceOn = !state.voiceOn;
   const btn = $('#btn-voice');
+  if (!btn) return;
   btn.textContent = state.voiceOn ? '🔊 Voz: activada' : '🔇 Voz: desactivada';
   btn.classList.toggle('on', state.voiceOn);
   if (!state.voiceOn) window.speechSynthesis.cancel();
@@ -149,18 +159,19 @@ function stopMetronome() { if (state.metronomeTimer) clearInterval(state.metrono
 
 function startStopGuide() {
   const btn = $('#btn-startstop');
+  if (!btn) return;
   state.running = !state.running;
   if (state.running) {
     btn.textContent = '⏹ Detener guía';
     btn.classList.add('btn-stop'); btn.classList.remove('btn-start');
-    $('#btn-next-step').disabled = false;
-    $('#btn-repeat-step').disabled = false;
+    const next = $('#btn-next-step'); if (next) next.disabled = false;
+    const repeat = $('#btn-repeat-step'); if (repeat) repeat.disabled = false;
     renderStep(); startMetronome();
   } else {
     btn.textContent = '▶ Iniciar guía';
     btn.classList.add('btn-start'); btn.classList.remove('btn-stop');
-    $('#btn-next-step').disabled = true;
-    $('#btn-repeat-step').disabled = true;
+    const next = $('#btn-next-step'); if (next) next.disabled = true;
+    const repeat = $('#btn-repeat-step'); if (repeat) repeat.disabled = true;
     stopMetronome(); window.speechSynthesis.cancel();
     setAvatar($('#guide-avatar'), state.guardian.id, 'idle');
   }
@@ -169,10 +180,13 @@ function startStopGuide() {
 function exitGuide() {
   state.running = false;
   stopMetronome(); window.speechSynthesis.cancel();
-  $('#btn-startstop').textContent = '▶ Iniciar guía';
-  $('#btn-startstop').classList.add('btn-start'); $('#btn-startstop').classList.remove('btn-stop');
-  $('#btn-next-step').disabled = true;
-  $('#btn-repeat-step').disabled = true;
+  const btn = $('#btn-startstop');
+  if (btn) {
+    btn.textContent = '▶ Iniciar guía';
+    btn.classList.add('btn-start'); btn.classList.remove('btn-stop');
+  }
+  const next = $('#btn-next-step'); if (next) next.disabled = true;
+  const repeat = $('#btn-repeat-step'); if (repeat) repeat.disabled = true;
   setAvatar($('#guide-avatar'), state.guardian.id, 'idle');
   showScreen('screen-emergency');
 }
@@ -182,24 +196,36 @@ function init() {
   setGuardian(GUARDIANS[0], false);
   renderGuardianGrid();
 
-  // Botón de la intro
-  $('#intro-start-btn').addEventListener('click', () => {
-    document.getElementById('intro-screen').classList.add('hidden');
-    document.getElementById('main-app').style.display = 'block';
-  });
+  const introStartBtn = $('#intro-start-btn');
+  if (introStartBtn) {
+    introStartBtn.addEventListener('click', () => {
+      const intro = document.getElementById('intro-screen');
+      const main = document.getElementById('main-app');
+      if (intro) intro.classList.add('hidden');
+      if (main) main.style.display = 'block';
+    });
+  }
 
-  $('#btn-iniciar-rcp').addEventListener('click', () => {
+  const btnIniciar = $('#btn-iniciar-rcp');
+  if (btnIniciar) btnIniciar.addEventListener('click', () => {
     state.stepIndex = 0;
     showScreen('screen-guide');
     renderStep();
   });
-  $('#btn-switch').addEventListener('click', () => showScreen('screen-select'));
-  $('#btn-back-emergency').addEventListener('click', () => showScreen('screen-emergency'));
-  $('#btn-exit-guide').addEventListener('click', exitGuide);
-  $('#btn-voice').addEventListener('click', toggleVoice);
-  $('#btn-next-step').addEventListener('click', nextStep);
-  $('#btn-repeat-step').addEventListener('click', repeatStep);
-  $('#btn-startstop').addEventListener('click', startStopGuide);
+  const btnSwitch = $('#btn-switch');
+  if (btnSwitch) btnSwitch.addEventListener('click', () => showScreen('screen-select'));
+  const btnBack = $('#btn-back-emergency');
+  if (btnBack) btnBack.addEventListener('click', () => showScreen('screen-emergency'));
+  const btnExit = $('#btn-exit-guide');
+  if (btnExit) btnExit.addEventListener('click', exitGuide);
+  const btnVoice = $('#btn-voice');
+  if (btnVoice) btnVoice.addEventListener('click', toggleVoice);
+  const btnNext = $('#btn-next-step');
+  if (btnNext) btnNext.addEventListener('click', nextStep);
+  const btnRepeat = $('#btn-repeat-step');
+  if (btnRepeat) btnRepeat.addEventListener('click', repeatStep);
+  const btnStartStop = $('#btn-startstop');
+  if (btnStartStop) btnStartStop.addEventListener('click', startStopGuide);
 
   document.querySelectorAll('.age-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -210,7 +236,6 @@ function init() {
     });
   });
 
-  // Desbloquear audio en iOS
   document.body.addEventListener('touchstart', () => {
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   }, { once: true });
