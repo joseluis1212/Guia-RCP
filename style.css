@@ -33,7 +33,7 @@ body {
     * { animation-duration: 0.001ms !important; }
 }
 
-/* ── INTRO SCREEN (HEADSPACE STYLE) ── */
+/* ── INTRO ── */
 .intro-screen {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: radial-gradient(ellipse 60% 40% at 50% 0%, #2a0e52 0%, transparent 60%),
@@ -44,22 +44,12 @@ body {
 }
 .intro-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-.intro-content {
-    text-align: center;
-    padding: 30px 20px;
-    max-width: 400px;
-}
-
-.intro-characters {
-    display: flex; justify-content: center; gap: 15px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
-
+.intro-content { text-align: center; padding: 30px 20px; max-width: 400px; }
+.intro-characters { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
 .intro-char {
     width: 70px; height: auto;
     filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
-    animation: fadeInUp 0.8s forwards, floatIntro 3s ease-in-out infinite;
+    animation: fadeInUp 0.8s forwards, softFloat 3s ease-in-out infinite;
     opacity: 0;
 }
 
@@ -68,51 +58,33 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes floatIntro {
+@keyframes softFloat {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    50% { transform: translateY(-6px); }
 }
 
 .intro-title {
-    font-size: clamp(24px, 7vw, 32px);
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 12px;
-    animation: fadeInUp 0.8s 0.3s forwards;
-    opacity: 0;
+    font-size: clamp(24px, 7vw, 32px); font-weight: 800; color: #fff;
+    margin-bottom: 12px; animation: fadeInUp 0.8s 0.3s forwards; opacity: 0;
 }
-
 .intro-subtitle {
-    font-size: clamp(14px, 4vw, 16px);
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 30px;
-    animation: fadeInUp 0.8s 0.5s forwards;
-    opacity: 0;
+    font-size: clamp(14px, 4vw, 16px); color: var(--text-muted); line-height: 1.6;
+    margin-bottom: 30px; animation: fadeInUp 0.8s 0.5s forwards; opacity: 0;
 }
-
 .intro-btn {
-    background: var(--teal);
-    color: #000;
-    border: none;
-    padding: 16px 40px;
-    border-radius: 50px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
+    background: var(--teal); color: #000; border: none;
+    padding: 16px 40px; border-radius: 50px;
+    font-size: 18px; font-weight: 700; cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 8px 25px rgba(61, 218, 215, 0.3);
-    animation: fadeInUp 0.8s 0.7s forwards;
-    opacity: 0;
+    animation: fadeInUp 0.8s 0.7s forwards; opacity: 0;
 }
 .intro-btn:active { transform: scale(0.96); }
 
-/* ── APLICACIÓN PRINCIPAL ── */
+/* ── APP PRINCIPAL ── */
 .app {
-    max-width: 480px; width: 100%;
-    min-height: 90vh;
-    background: var(--card);
-    border-radius: var(--radius-lg);
+    max-width: 480px; width: 100%; min-height: 90vh;
+    background: var(--card); border-radius: var(--radius-lg);
     box-shadow: 0 20px 50px rgba(0,0,0,0.6);
     border: 1px solid var(--line);
     position: relative; z-index: 1;
@@ -123,19 +95,33 @@ body {
 .screen.active { display: flex; }
 @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-/* EMERGENCY SCREEN */
+/* ── GUARDIÁN CON ANIMACIÓN DE VIDA ── */
+.guardian-img {
+    /* Respiración + flotación */
+    animation: breathe 3.5s ease-in-out infinite, softFloat 3s ease-in-out infinite;
+    transition: filter 0.2s;
+}
+/* Efecto al hablar: resplandor pulsante */
+.guardian-img.speaking {
+    animation: talkPulse 0.5s ease-in-out infinite, softFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px var(--teal));
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+@keyframes talkPulse {
+    0%, 100% { filter: drop-shadow(0 0 6px var(--teal)); }
+    50% { filter: drop-shadow(0 0 20px var(--teal)); }
+}
+
+/* ── EMERGENCIA ── */
 .alert-banner { text-align: center; padding: 10px 0; }
 .alert-banner h1 { font-size: clamp(20px, 5vw, 24px); font-weight: 800; }
 .hero-row { display: flex; align-items: flex-end; gap: 14px; margin: 20px 0 24px; }
-.hero-char img {
-    width: 100px; height: auto;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-    animation: float 3s ease-in-out infinite;
-}
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-}
+.hero-char img { width: 100px; }
 .glow-ring {
     width: 80px; height: 12px; background: var(--teal); filter: blur(12px); opacity: .5;
     border-radius: 50%; margin: -6px auto 0;
@@ -153,8 +139,7 @@ body {
     color: #fff; background: #ff4757;
     border: none; cursor: pointer;
     box-shadow: 0 0 24px rgba(255,70,60,0.65);
-    margin-bottom: 16px;
-    transition: transform 0.2s;
+    margin-bottom: 16px; transition: transform 0.2s;
 }
 .cta-primary:active { transform: scale(0.97); }
 .switch-guardian {
@@ -163,7 +148,7 @@ body {
     color: var(--text-muted); cursor: pointer; font-size: 14px;
 }
 
-/* SELECT GUARDIAN SCREEN */
+/* ── SELECCIÓN ── */
 .select-head { text-align: center; margin: 18px 0 22px; }
 .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); font-weight: 700; }
 .select-head h1 { font-size: clamp(22px, 6vw, 26px); font-weight: 800; margin-top: 8px; }
@@ -178,34 +163,29 @@ body {
     cursor: pointer; transition: border-color .25s, transform .2s;
 }
 .guardian-card:active { transform: scale(.97); }
-.guardian-card img {
-    width: 70px; height: auto; object-fit: contain; margin-bottom: 10px;
-    animation: float 3s ease-in-out infinite;
-}
+.guardian-card img { width: 70px; height: auto; margin-bottom: 10px; }
 .guardian-card .g-name { font-weight: 800; font-size: 15px; }
 .guardian-card .g-role { font-size: 12px; color: var(--text-muted); }
 .guardian-card[data-accent="hoodie"] { border-color: var(--pink); }
 .guardian-card[data-accent="pulse"] { border-color: var(--cyan); }
 .guardian-card[data-accent="astro"] { border-color: var(--orange); }
 .guardian-card[data-accent="bunny"] { border-color: var(--gold); }
-
 .btn-icon {
     background: transparent; border: 1px solid var(--line); border-radius: 20px;
     padding: 8px 14px; color: var(--text-muted); cursor: pointer; font-size: 13px;
     align-self: flex-start;
 }
 
-/* GUIDE SCREEN */
+/* ── GUÍA ── */
 .guide-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .age-selector { display: flex; gap: 6px; }
-.age-btn { padding: 8px 12px; border: 1px solid var(--line); border-radius: 20px; font-size: 13px; background: transparent; color: var(--text-muted); cursor: pointer; }
+.age-btn {
+    padding: 8px 12px; border: 1px solid var(--line); border-radius: 20px;
+    font-size: 13px; background: transparent; color: var(--text-muted); cursor: pointer;
+}
 .age-btn.active { background: var(--teal); color: #000; border-color: var(--teal); font-weight: 700; }
 .guide-avatar-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
-.guide-avatar-img {
-    width: 120px; height: auto;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-    animation: float 3s ease-in-out infinite;
-}
+.guide-avatar-img { width: 120px; }
 .guide-glow { width: 80px; margin-top: -8px; }
 .speech-bubble {
     background: var(--card); border: 1px solid var(--teal); border-radius: 16px;
@@ -222,7 +202,10 @@ body {
 .progress-fill { height: 100%; background: var(--teal); border-radius: 3px; transition: width 0.3s; }
 
 .guide-controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
-.btn { width: 100%; padding: 16px; border: none; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; text-align: center; }
+.btn {
+    width: 100%; padding: 16px; border: none; border-radius: 50px;
+    font-size: 1rem; font-weight: 700; cursor: pointer; text-align: center;
+}
 .btn:disabled { opacity: 0.4; }
 .btn-start { background: var(--teal); color: #000; }
 .btn-stop { background: #ff4757; color: #fff; }
@@ -230,7 +213,10 @@ body {
 .btn-repeat { background: #6c5ce7; color: #fff; }
 .btn-voice { background: transparent; border: 1px solid var(--line); color: var(--text-muted); }
 .btn-voice.on { border-color: var(--teal); color: var(--teal); }
-.btn-emergency { background: #ff4757; color: #fff; text-decoration: none; display: block; animation: pulseCta 2.2s infinite; }
+.btn-emergency {
+    background: #ff4757; color: #fff; text-decoration: none; display: block;
+    animation: pulseCta 2.2s infinite;
+}
 @keyframes pulseCta {
     0%,100% { box-shadow: 0 0 24px rgba(255,70,60,0.65); }
     50% { box-shadow: 0 0 36px rgba(255,70,60,0.85); }
