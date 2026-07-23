@@ -1,14 +1,13 @@
 // ========================
-//  GUARDIANES DE LA VIDA — vSegura (con fallback robusto)
+//  GUARDIANES DE LA VIDA — vFinal con vida (respiración + habla)
 // ========================
 
-const IMG_EXT = 'webp';
-
+const IMG_EXT = 'webp';             // Cambiar a 'png' si tus imágenes son .png
 const FOLDER_NAMES = {
   hoodie: 'Hoodie',
-  pulse: 'Pulse',
-  astro: 'Astro',
-  bunny: 'Bunny'
+  pulse:  'Pulse',
+  astro:  'Astro',
+  bunny:  'Bunny'
 };
 
 const GUARDIANS = [
@@ -42,6 +41,7 @@ let state = {
 
 const $ = (sel) => document.querySelector(sel);
 
+/* ── Rutas de imágenes ── */
 function getAssetPath(guardianId, pose) {
   const folder = FOLDER_NAMES[guardianId] || guardianId;
   return `assets/guardians/${folder}/${pose}.${IMG_EXT}`;
@@ -60,12 +60,27 @@ function setAvatar(imgElement, guardianId, pose) {
   imgElement.src = primary;
 }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const screen = document.getElementById(id);
-  if (screen) screen.classList.add('active');
+/* ── Animación de habla ── */
+function setSpeaking(guardianId, isSpeaking) {
+  const guideImg = $('#guide-avatar');
+  if (guideImg) {
+    guideImg.classList.toggle('speaking', isSpeaking);
+  }
+  // Opcional: también en la pantalla de emergencia
+  const emImg = $('#em-avatar');
+  if (emImg) {
+    emImg.classList.toggle('speaking', isSpeaking);
+  }
 }
 
+/* ── Pantallas ── */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+}
+
+/* ── Guardián ── */
 function setGuardian(g, speakGreeting = false) {
   state.guardian = g;
   setAvatar($('#em-avatar'), g.id, 'idle');
@@ -74,9 +89,7 @@ function setGuardian(g, speakGreeting = false) {
   const emText = $('#em-text');
   if (emName) emName.textContent = g.name;
   if (emText) emText.textContent = g.greet;
-  document.querySelectorAll('.glow-ring').forEach(ring => {
-    ring.style.background = g.accent;
-  });
+  document.querySelectorAll('.glow-ring').forEach(ring => ring.style.background = g.accent);
   if (speakGreeting && state.voiceOn) speak(g.greet);
 }
 
@@ -90,7 +103,7 @@ function renderGuardianGrid() {
     card.dataset.accent = g.id;
     const imgPath = getAssetPath(g.id, 'idle');
     card.innerHTML = `
-      <img src="${imgPath}" alt="${g.name}" onerror="this.onerror=null;this.src='${g.id}.png';">
+      <img src="${imgPath}" alt="${g.name}" onerror="this.onerror=null;this.src='${g.id}.png';" class="guardian-img">
       <div class="g-name">${g.name}</div>
       <div class="g-role">${g.role}</div>
     `;
@@ -102,6 +115,7 @@ function renderGuardianGrid() {
   });
 }
 
+/* ── Pasos ── */
 function renderStep() {
   if (!state.running) return;
   const s = STEPS[state.stepIndex];
@@ -119,12 +133,17 @@ function renderStep() {
   if (state.voiceOn) speak(s.title + '. ' + s[state.age]);
 }
 
+/* ── Voz ── */
 function speak(text) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'es-AR';
   u.rate = 1;
+
+  setSpeaking(state.guardian.id, true);
+  u.onend = () => setSpeaking(state.guardian.id, false);
+  u.onerror = () => setSpeaking(state.guardian.id, false);
   window.speechSynthesis.speak(u);
 }
 
@@ -134,12 +153,20 @@ function toggleVoice() {
   if (!btn) return;
   btn.textContent = state.voiceOn ? '🔊 Voz: activada' : '🔇 Voz: desactivada';
   btn.classList.toggle('on', state.voiceOn);
-  if (!state.voiceOn) window.speechSynthesis.cancel();
+  if (!state.voiceOn) {
+    window.speechSynthesis.cancel();
+    setSpeaking(state.guardian.id, false);
+  }
 }
 
-function nextStep() { state.stepIndex = (state.stepIndex + 1) % STEPS.length; renderStep(); }
+/* ── Navegación ── */
+function nextStep() {
+  state.stepIndex = (state.stepIndex + 1) % STEPS.length;
+  renderStep();
+}
 function repeatStep() { renderStep(); }
 
+/* ── Metrónomo ── */
 let audioCtx = null;
 function beep() {
   try {
@@ -154,9 +181,16 @@ function beep() {
     osc.start(); osc.stop(audioCtx.currentTime + 0.1);
   } catch(e) {}
 }
-function startMetronome() { stopMetronome(); state.metronomeTimer = setInterval(beep, 60000 / 110); }
-function stopMetronome() { if (state.metronomeTimer) clearInterval(state.metronomeTimer); state.metronomeTimer = null; }
+function startMetronome() {
+  stopMetronome();
+  state.metronomeTimer = setInterval(beep, 60000 / 110);
+}
+function stopMetronome() {
+  if (state.metronomeTimer) clearInterval(state.metronomeTimer);
+  state.metronomeTimer = null;
+}
 
+/* ── Control de la guía ── */
 function startStopGuide() {
   const btn = $('#btn-startstop');
   if (!btn) return;
@@ -173,6 +207,7 @@ function startStopGuide() {
     const next = $('#btn-next-step'); if (next) next.disabled = true;
     const repeat = $('#btn-repeat-step'); if (repeat) repeat.disabled = true;
     stopMetronome(); window.speechSynthesis.cancel();
+    setSpeaking(state.guardian.id, false);
     setAvatar($('#guide-avatar'), state.guardian.id, 'idle');
   }
 }
@@ -180,6 +215,7 @@ function startStopGuide() {
 function exitGuide() {
   state.running = false;
   stopMetronome(); window.speechSynthesis.cancel();
+  setSpeaking(state.guardian.id, false);
   const btn = $('#btn-startstop');
   if (btn) {
     btn.textContent = '▶ Iniciar guía';
@@ -191,11 +227,12 @@ function exitGuide() {
   showScreen('screen-emergency');
 }
 
-// ── INICIO ──
+/* ── Inicialización ── */
 function init() {
   setGuardian(GUARDIANS[0], false);
   renderGuardianGrid();
 
+  // Intro
   const introStartBtn = $('#intro-start-btn');
   if (introStartBtn) {
     introStartBtn.addEventListener('click', () => {
@@ -206,6 +243,7 @@ function init() {
     });
   }
 
+  // Eventos de botones
   const btnIniciar = $('#btn-iniciar-rcp');
   if (btnIniciar) btnIniciar.addEventListener('click', () => {
     state.stepIndex = 0;
@@ -227,6 +265,7 @@ function init() {
   const btnStartStop = $('#btn-startstop');
   if (btnStartStop) btnStartStop.addEventListener('click', startStopGuide);
 
+  // Selector de edad
   document.querySelectorAll('.age-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
@@ -236,6 +275,7 @@ function init() {
     });
   });
 
+  // Desbloquear audio en iOS
   document.body.addEventListener('touchstart', () => {
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   }, { once: true });
