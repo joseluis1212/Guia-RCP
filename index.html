@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- PANTALLA DE INTRO (HEADSPACE STYLE) -->
+    <!-- INTRO ANIMADA -->
     <div id="intro-screen" class="intro-screen">
         <div class="intro-content">
             <div class="intro-characters">
@@ -25,9 +25,9 @@
         </div>
     </div>
 
-    <!-- APLICACIÓN PRINCIPAL (oculta hasta después de la intro) -->
+    <!-- APLICACIÓN PRINCIPAL -->
     <div id="main-app" class="app" style="display:none;">
-        <!-- PANTALLA 1: EMERGENCIA (inicio rápido) -->
+        <!-- PANTALLA EMERGENCIA -->
         <div id="screen-emergency" class="screen active">
             <div class="alert-banner">
                 <h1>🚨 ¿Necesitás ayuda?</h1>
@@ -35,7 +35,7 @@
             </div>
             <div class="hero-row">
                 <div class="hero-char">
-                    <img id="em-avatar" src="assets/guardians/Hoodie/idle.webp" alt="Hoodie">
+                    <img id="em-avatar" src="assets/guardians/Hoodie/idle.webp" alt="Hoodie" class="guardian-img">
                     <div class="glow-ring"></div>
                 </div>
                 <div class="bubble">
@@ -47,7 +47,7 @@
             <button id="btn-switch" class="switch-guardian">🔄 Cambiar de asistente</button>
         </div>
 
-        <!-- PANTALLA 2: SELECCIÓN DE GUARDIÁN -->
+        <!-- PANTALLA SELECCIÓN DE GUARDIÁN -->
         <div id="screen-select" class="screen">
             <div class="select-head">
                 <div class="eyebrow">✨ Elegí tu compañero</div>
@@ -58,7 +58,7 @@
             <button id="btn-back-emergency" class="btn-icon" style="margin-top:20px;">← Volver al inicio</button>
         </div>
 
-        <!-- PANTALLA 3: GUÍA PASO A PASO -->
+        <!-- PANTALLA GUÍA PASO A PASO -->
         <div id="screen-guide" class="screen">
             <div class="guide-top">
                 <button id="btn-exit-guide" class="btn-icon">← Salir</button>
@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div class="guide-avatar-area">
-                <img id="guide-avatar" src="assets/guardians/Hoodie/idle.webp" alt="Guardián" class="guide-avatar-img">
+                <img id="guide-avatar" src="assets/guardians/Hoodie/idle.webp" alt="Guardián" class="guardian-img">
                 <div class="glow-ring guide-glow"></div>
             </div>
             <div id="speech-bubble" class="speech-bubble">
