@@ -1,11 +1,10 @@
 {
-  "name": "Guardianes de la Vida",
-  "short_name": "Guardianes",
-  "description": "Guía interactiva de RCP con personajes 3D y voz",
-  "start_url": "index.html",
+  "name": "Guardianes de la Vida – RCP",
+  "short_name": "Guardianes RCP",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#0d0a1a",
-  "theme_color": "#0d0a1a",
+  "background_color": "#0d0221",
+  "theme_color": "#0d0221",
   "icons": [
     {
       "src": "icon-192.png",
