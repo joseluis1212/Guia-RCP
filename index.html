@@ -1,32 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><!-- PLAYABLE_TOUCH_PATCH_V1 --><script>
-(function() {
-  if (window.__playableTouchPatchInstalled) return;
-  window.__playableTouchPatchInstalled = true;
-  var origAdd = EventTarget.prototype.addEventListener;
-  var blockedTypes = { touchstart: 1, touchmove: 1, wheel: 1 };
-  EventTarget.prototype.addEventListener = function(type, listener, options) {
-    if (blockedTypes[type]) {
-      if (options === undefined || options === null) {
-        options = { passive: true };
-      } else if (typeof options === 'boolean') {
-        options = { capture: options, passive: true };
-      } else {
-        options = Object.assign({}, options, { passive: true });
-      }
-    }
-    return origAdd.call(this, type, listener, options);
-  };
-})();
-</script><script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0d0221">
+    <meta name="description" content="Guía interactiva de RCP accesible con NOVA, tu compañero con voz, ritmo y alto contraste. Funciona 100% offline.">
     <title>Guardianes de la Vida — RCP con NOVA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icono para iOS -->
+    <link rel="apple-touch-icon" href="assets/guardians/NOVA/NOVA_idle_transparente.png">
 </head>
 <body>
     <!-- INTRO ANIMADA CON NOVA -->
@@ -63,7 +47,6 @@
             </div>
             <button id="btn-iniciar-rcp" class="cta-primary">⚡ INICIAR GUÍA CON NOVA</button>
             <button id="btn-switch" class="switch-guardian">🔄 Cambiar de asistente</button>
-            <!-- Accesibilidad rápida -->
             <div style="display:flex; gap:8px; margin-top:12px;">
                 <button id="btn-quick-voice" class="btn-icon" style="flex:1;">🔊 Leeme en voz alta</button>
                 <button id="btn-quick-easy" class="btn-icon" style="flex:1;">🧠 Fácil</button>
@@ -88,32 +71,6 @@
                     <button class="age-btn" data-age="nino">Niño</button>
                     <button class="age-btn" data-age="bebe">Bebé</button>
                 </div>
-            </div>
             <div class="guide-avatar-area">
                 <img id="guide-avatar" src="assets/guardians/NOVA/idle.webp" alt="Guardián" class="guardian-img">
-                <div class="glow-ring guide-glow"></div>
-                <div id="ritmo-visual" style="margin-top:8px; font-weight:800; color:var(--cyan); display:none;">● RITMO 110</div>
-            </div>
-            <div id="speech-bubble" class="speech-bubble">
-                <p id="step-tag">Paso 1 de 10</p>
-                <h2 id="step-title">Verificar la escena</h2>
-                <p id="step-desc">Confirmá que el lugar es seguro antes de acercarte.</p>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill" style="width:10%"></div>
-            </div>
-            <div class="guide-controls">
-                <button id="btn-startstop" class="btn btn-start">▶ Iniciar guía con voz</button>
-                <button id="btn-repeat-step" class="btn btn-repeat" disabled>🔁 Repetir paso</button>
-                <button id="btn-next-step" class="btn btn-next" disabled>⏭ Siguiente paso</button>
-                <button id="btn-voice" class="btn btn-voice on">🔊 Voz: activada</button>
-                <button id="btn-ritmo" class="btn" style="background:var(--pink); color:#fff; display:none;">🥁 MARCAR RITMO RCP</button>
-            </div>
-            <a href="tel:107" class="btn btn-emergency">📞 Llamar al 107</a>
-            <p class="disclaimer">Guardianes de la Vida con NOVA · No sustituye formación profesional · Accesible WCAG 2.2</p>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+                <div class
