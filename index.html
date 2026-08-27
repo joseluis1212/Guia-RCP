@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RCP Guía · Health</title>
-  <!-- Google Fonts (Inter + Poppins para contraste) -->
+  <title>RCP Guía · Health Dashboard</title>
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
@@ -16,26 +16,41 @@
   <div class="app-wrapper">
     <div class="app-container">
       
-      <!-- Header con gráfico de ECG -->
+      <!-- Header con título y tema -->
       <header class="app-header">
         <div class="header-left">
-          <div class="ecg-icon">
-            <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
-              <polyline points="0,15 10,15 15,5 20,25 25,15 35,15 40,5 45,25 50,15 60,15 65,5 70,25 75,15 85,15 90,5 95,25 100,15" 
-                stroke="var(--primary)" stroke-width="2" fill="none" stroke-linejoin="round"/>
-            </svg>
+          <div class="logo-icon">
+            <i class="fas fa-heartbeat"></i>
           </div>
-          <h1>RCP <span>Health</span></h1>
+          <div>
+            <h1>RCP <span>Health</span></h1>
+            <p class="header-sub">Guía interactiva · Argentina</p>
+          </div>
         </div>
-        <div class="header-right">
-          <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
-            <i class="fas fa-moon"></i>
-          </button>
-        </div>
+        <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
+          <i class="fas fa-moon"></i>
+        </button>
       </header>
-      <p class="subtitle">Asistente interactivo · Argentina</p>
 
-      <!-- Selector de tipo (cards con iconos grandes) -->
+      <!-- Dashboard: resumen de estado -->
+      <div class="dashboard-cards">
+        <div class="dash-card">
+          <span class="dash-label">Estado</span>
+          <div class="dash-value" id="statusBadge">
+            <span class="badge badge-ready"><i class="fas fa-circle"></i> Listo</span>
+          </div>
+        </div>
+        <div class="dash-card">
+          <span class="dash-label">Progreso</span>
+          <div class="dash-value" id="progressBadge">0%</div>
+        </div>
+        <div class="dash-card">
+          <span class="dash-label">Tipo</span>
+          <div class="dash-value" id="typeBadge">Adulto</div>
+        </div>
+      </div>
+
+      <!-- Selector de tipo (cards) -->
       <div class="type-selector">
         <button class="type-card active" data-type="adulto">
           <i class="fas fa-user"></i>
@@ -51,39 +66,31 @@
         </button>
       </div>
 
-      <!-- Estado de la guía (mood) -->
-      <div class="status-indicator" id="statusIndicator">
-        <i class="fas fa-circle" style="color: #22c55e;"></i>
-        <span>Listo para iniciar</span>
-      </div>
-
-      <!-- Progreso circular + barra -->
-      <div class="progress-area">
-        <div class="progress-circle">
+      <!-- Progreso circular + paso actual -->
+      <div class="progress-dashboard">
+        <div class="progress-ring">
           <svg viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--card-border)" stroke-width="8" />
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border-color)" stroke-width="8" />
             <circle cx="60" cy="60" r="50" fill="none" stroke="var(--primary)" stroke-width="8" 
               stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" id="progressCircle" />
           </svg>
-          <span class="progress-label" id="progressLabel">0%</span>
+          <div class="ring-label">
+            <span id="progressPercent">0%</span>
+            <small>completado</small>
+          </div>
         </div>
-        <div class="progress-text">
-          <span class="step-counter" id="stepCounter">Paso 1 de 10</span>
-        </div>
-      </div>
-
-      <!-- Tarjeta del paso (con número y texto) -->
-      <div class="step-card" id="stepCard">
-        <div class="step-number" id="stepNumber">01</div>
-        <p class="step-text" id="stepText">Seleccioná un tipo y presioná "Iniciar".</p>
-        <div class="step-actions">
-          <button id="voiceBtn" class="voice-btn" title="Escuchar paso">
-            <i class="fas fa-volume-up"></i>
-          </button>
+        <div class="step-info">
+          <div class="step-number-badge" id="stepNumber">01</div>
+          <p class="step-text" id="stepText">Seleccioná un tipo y presioná "Iniciar".</p>
+          <div class="step-actions">
+            <button id="voiceBtn" class="voice-btn" title="Escuchar paso">
+              <i class="fas fa-volume-up"></i>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Controles -->
+      <!-- Controles principales -->
       <div class="controls">
         <button id="startBtn" class="btn btn-primary">
           <i class="fas fa-play"></i> Iniciar Guía
@@ -93,27 +100,30 @@
         </button>
       </div>
 
-      <!-- Metrónomo (mejorado visualmente) -->
-      <div id="metronomeBox" class="metronome-box" style="display: none;">
-        <div class="metro-header">
+      <!-- Widget: Metrónomo -->
+      <div id="metronomeBox" class="widget-metronome" style="display: none;">
+        <div class="widget-header">
           <i class="fas fa-drum"></i>
-          <span>Metrónomo · 100-120/min</span>
+          <span>Metrónomo</span>
+          <span class="widget-bpm">100-120/min</span>
         </div>
-        <div class="metro-visual">
-          <div class="pulse-ring" id="pulseRing"></div>
-        </div>
-        <div class="metro-controls">
-          <button id="metroStart" class="metro-btn"><i class="fas fa-play"></i> Iniciar</button>
-          <button id="metroStop" class="metro-btn" disabled><i class="fas fa-stop"></i> Parar</button>
+        <div class="widget-body">
+          <div class="metro-visual">
+            <div class="pulse-ring" id="pulseRing"></div>
+          </div>
+          <div class="metro-controls">
+            <button id="metroStart" class="metro-btn"><i class="fas fa-play"></i> Iniciar</button>
+            <button id="metroStop" class="metro-btn" disabled><i class="fas fa-stop"></i> Parar</button>
+          </div>
         </div>
       </div>
 
-      <!-- Botón de emergencia -->
+      <!-- Botón de emergencia (destacado) -->
       <a href="tel:107" class="btn btn-emergency">
-        <i class="fas fa-phone-alt"></i> Llamar al 107
+        <i class="fas fa-phone-alt"></i> Llamar al 107 (Emergencia)
       </a>
 
-      <!-- Notificaciones internas (toast) -->
+      <!-- Toast para notificaciones -->
       <div id="toast" class="toast" style="display: none;"></div>
 
       <p class="disclaimer">
